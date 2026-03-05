@@ -1,0 +1,371 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neon-blue: #00f2ff;
+  --color-emerald: #00ff88;
+  --color-red-alert: #ff004c;
+  --color-amber-warning: #ffb300;
+  --color-dark-bg: #050505;
+  --color-glass: rgba(255, 255, 255, 0.05);
+
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-outfit: "Outfit", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* Motion Tokens */
+  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+  --ease-brutal: cubic-bezier(0.19, 1, 0.22, 1);
+  --duration-fast: 150ms;
+  --duration-smooth: 300ms;
+  --duration-fluid: 500ms;
+}
+
+:root {
+  --background: var(--color-dark-bg);
+  --foreground: #ffffff;
+  --accent: var(--color-neon-blue);
+  --emerald: var(--color-emerald);
+  --red-alert: var(--color-red-alert);
+  --amber-warning: var(--color-amber-warning);
+
+  /* Semantic Hues */
+  --security-hue: 150;
+  --alert-hue: 340;
+  --system-hue: 190;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter);
+  overflow-x: hidden;
+}
+
+h1 {
+  @apply text-8xl font-black italic uppercase;
+  letter-spacing: -0.08em;
+  line-height: 0.85;
+}
+
+h2 {
+  @apply text-5xl font-black uppercase;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+h3 {
+  @apply text-2xl font-black uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Minimalist Brutalism Utils */
+.brutalist-border {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  @apply transition-all duration-300;
+}
+
+.brutalist-border:hover {
+  border-color: var(--emerald);
+  box-shadow: 8px 8px 0px rgba(0, 255, 136, 0.1);
+}
+
+.sovereign-scanline {
+  position: relative;
+  overflow-x: hidden;
+}
+
+.sovereign-scanline::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--emerald), transparent);
+  opacity: 0.1;
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.glass-morphism {
+  background: var(--color-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+/* Sovereign Signal Animations */
+@keyframes emerald-breath {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 5px var(--emerald));
+    opacity: 0.7;
+  }
+
+  50% {
+    filter: drop-shadow(0 0 15px var(--emerald));
+    opacity: 1;
+  }
+}
+
+@keyframes red-strobe {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 20px var(--red-alert));
+    opacity: 1;
+  }
+
+  50% {
+    filter: drop-shadow(0 0 0px var(--red-alert));
+    opacity: 0.3;
+  }
+}
+
+.signal-emerald {
+  animation: emerald-breath 3s infinite ease-in-out;
+}
+
+.signal-red {
+  animation: red-strobe 0.2s infinite steps(2);
+}
+
+/* Kinetic Typography Utils */
+.kinetic-text {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  display: inline-block;
+}
+
+.kinetic-text:hover {
+  letter-spacing: 0.15em;
+  transform: scale(1.02) skewX(-5deg);
+  color: var(--color-neon-blue);
+}
+
+/* Strategic Sidebar & Navigation */
+.main-sidebar {
+  @apply fixed left-0 top-0 bottom-0 w-64 border-r border-white/10 z-[80] flex flex-col p-8 transition-transform duration-500;
+  background: rgba(5, 5, 5, 0.95);
+  backdrop-filter: blur(24px);
+}
+
+.sidebar-nav-item {
+  @apply flex items-center gap-4 py-3 px-4 text-[10px] font-black uppercase tracking-widest transition-all duration-300 border-l-2 border-transparent;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-nav-item:hover {
+  @apply text-emerald-400 bg-emerald-500/5;
+  border-left-color: rgba(0, 255, 136, 0.3);
+}
+
+.sidebar-nav-item.active {
+  @apply text-emerald-400 bg-emerald-500/10;
+  border-left-color: #00ff88;
+  box-shadow: inset 4px 0 20px rgba(0, 255, 136, 0.05);
+}
+
+.persona-tag {
+  @apply px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-tighter;
+}
+
+.persona-tag.executive {
+  background: #00f2ff;
+  color: #000;
+}
+
+.persona-tag.engineer {
+  background: #00ff88;
+  color: #000;
+}
+
+.persona-tag.auditor {
+  background: #ff004c;
+  color: #fff;
+}
+
+.legal-sidebar {
+  @apply fixed right-0 top-1/2 -translate-y-1/2 w-48 p-6 border-l border-emerald-500/30 hidden lg:block;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(12px);
+  z-index: 40;
+}
+
+.legal-nav-item {
+  @apply block py-3 font-mono text-[9px] uppercase tracking-widest text-slate-500 hover:text-emerald-400 transition-all duration-300 text-right;
+  border-right: 2px solid transparent;
+}
+
+.legal-nav-item.active {
+  @apply text-emerald-400 font-black;
+  border-right: 2px solid #00ff88;
+  padding-right: 1rem;
+}
+
+.legal-content-container {
+  @apply max-w-4xl mx-auto py-24 px-6;
+}
+
+.brutalist-legal-card {
+  @apply bg-black/40 border border-white/5 p-12 relative overflow-hidden;
+  box-shadow: 10px 10px 0px rgba(0, 255, 136, 0.03);
+}
+
+.legal-scroll-area::-webkit-scrollbar {
+  width: 2px;
+}
+
+.legal-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.legal-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 136, 0.1);
+}
+
+/* Metadata & Legibility Fix (Heuristic #6) */
+.metadata-text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* Clinical Overlay (Heuristic #2) */
+.clinical-overlay {
+  @apply absolute z-50 p-4 bg-black border-2 border-emerald-500 shadow-[4px_4px_0px_#00ff88] pointer-events-none opacity-0 transition-opacity duration-200;
+  max-width: 280px;
+  left: 0;
+  top: 100%;
+  margin-top: 8px;
+}
+
+.has-clinical-overlay {
+  @apply relative;
+}
+
+.has-clinical-overlay:hover .clinical-overlay {
+  @apply opacity-100;
+}
+
+/* Command Ingestor (Heuristic #3 & #5) */
+.command-ingestor-backdrop {
+  @apply fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-8;
+}
+
+.command-ingestor-input {
+  @apply w-full max-w-4xl bg-transparent border-b-4 border-emerald-500 p-12 text-6xl font-black italic uppercase text-emerald-400 outline-none placeholder:opacity-20;
+}
+
+/* Focus-on-Hover (Heuristic #6) */
+.focus-hover-container {
+  @apply transition-all duration-500 opacity-20 filter blur-[2px] hover:opacity-100 hover:blur-none;
+}
+
+.stewards-guide-card {
+  @apply fixed bottom-12 left-12 z-[60] w-96 p-8 bg-black border-2 border-white/20 shadow-xl;
+}
+
+/* ========================
+   ACCESSIBILITY MODES
+   ======================== */
+
+/* Skip-to-main link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  background: #00ff88;
+  color: #000;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  z-index: 9999;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 8px;
+}
+
+/* High Contrast Mode */
+body.high-contrast {
+  filter: contrast(1.6) brightness(1.1);
+}
+
+body.high-contrast .glass-morphism {
+  background: rgba(0, 0, 0, 0.95);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+body.high-contrast .brutalist-border {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Large Text Mode */
+body.large-text {
+  font-size: 120%;
+}
+
+body.large-text h1 {
+  font-size: 5rem;
+}
+
+body.large-text h2 {
+  font-size: 3rem;
+}
+
+body.large-text h3 {
+  font-size: 1.8rem;
+}
+
+/* Reduce Motion Mode — prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .sovereign-scanline::after {
+    animation: none;
+  }
+}
+
+/* Reduce Motion Mode — JS class toggle */
+body.reduce-motion *,
+body.reduce-motion *::before,
+body.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+body.reduce-motion .sovereign-scanline::after {
+  animation: none;
+}
+
+/* Focus visible for keyboard nav */
+:focus-visible {
+  outline: 2px solid #00ff88;
+  outline-offset: 2px;
+}

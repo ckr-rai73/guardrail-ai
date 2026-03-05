@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardrail.ai // Executive Briefing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --emerald: #00ff88;
+            --bg: #050505;
+            --text: #ffffff;
+            --accent: #111;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10% 15%;
+            position: relative;
+            scroll-snap-align: start;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: radial-gradient(circle at top right, rgba(0, 255, 136, 0.03), transparent);
+        }
+
+        .container {
+            scroll-snap-type: y mandatory;
+            height: 100vh;
+            overflow-y: scroll;
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: -3px;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--emerald);
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        p {
+            font-size: 1.5rem;
+            opacity: 0.6;
+            max-width: 800px;
+            line-height: 1.4;
+            margin-bottom: 2rem;
+        }
+
+        .tag {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--emerald);
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .emerald {
+            color: var(--emerald);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-cols: repeat(2, 1fr);
+            gap: 4rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            color: var(--emerald);
+        }
+
+        .card p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-cols: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            border-left: 2px solid var(--emerald);
+            padding-left: 2rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0.4;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            font-size: 0.6rem;
+            opacity: 0.3;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            opacity: 0.1;
+            font-weight: 900;
+            font-size: 0.8rem;
+            letter-spacing: 0.4em;
+        }
+
+        @media print {
+            .slide {
+                height: 100vh;
+                page-break-after: always;
+                scroll-snap-align: none;
+            }
+
+            .container {
+                overflow: visible;
+                height: auto;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: fadeIn 1s forwards;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="watermark">SOVEREIGN_SYSTEMS_ARCHIVE</div>
+    <div class="footer">Confidiental // Guardrail.ai Executive Briefing // 2026</div>
+
+    <div class="container">
+        <!-- SLIDE 1: COVER -->
+        <section class="slide">
+            <div class="tag animate">The Sovereign Standard</div>
+            <h1 class="animate">Guardrail.ai<br><span class="emerald">Trust Mesh</span></h1>
+            <p class="animate" style="margin-top: 2rem;">Institutional-Grade AI Safety, Governance, and Risk
+                Neutralization for the Agentic Era.</p>
+        </section>
+
+        <!-- SLIDE 2: THE PROBLEM -->
+        <section class="slide">
+            <div class="tag">The Friction</div>
+            <h2>The $73M<br>Liability Gap</h2>
+            <p>Enterprises are deploying autonomous agents without "hardware-locked" safety nets, creating a systemic
+                risk that existing software-only guardrails cannot intercept.</p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Semantic Drift</h3>
+                    <p>Models drifting outside mission parameters in sub-millisecond cycles.</p>
+                </div>
+                <div class="card">
+                    <h3>Logic Collision</h3>
+                    <p>Multi-agent interactions creating unhedged institutional liabilities.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: THE SOLUTION -->
+        <section class="slide">
+            <div class="tag">The Solution</div>
+            <h2>Sovereign<br>Trust Mesh</h2>
+            <p>A multi-layered defense architecture that intercepts adversarial intent and semantic divergence at the
+                hardware level before it touches the balance sheet.</p>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-value">2.1ms</div>
+                    <div class="stat-label">P99 Veto Latency</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">0.8ms</div>
+                    <div class="stat-label">Consensus Yield</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Judicial Finality</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$14.8M</div>
+                    <div class="stat-label">Buffer Capacity</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: THE PERSONAS -->
+        <section class="slide">
+            <div class="tag">Human-Centered Governance</div>
+            <h2>The Persona<br>Experience</h2>
+            <div class="grid" style="grid-template-cols: repeat(4, 1fr); gap: 1rem;">
+                <div class="card" style="padding: 1.5rem;">
+                    <h3 style="font-size: 0.8rem;">The CTO</h3>
+                    <p style="font-size: 0.7rem; opacity: 0.6;">Drives dominance and liability neutralization through
+                        hardware anchors.</p>
+                </div>
+                <div class="card" style="padding: 1.5rem;">
+                    <h3 style="font-size: 0.8rem;">The Engineer</h3>
+                    <p style="font-size: 0.7rem; opacity: 0.6;">Maintains velocity with frictionless intercept
+                        debuggers.</p>
+                </div>
+                <div class="card" style="padding: 1.5rem;">
+                    <h3 style="font-size: 0.8rem;">The Auditor</h3>
+                    <p style="font-size: 0.7rem; opacity: 0.6;">Secures NIST-grade forensic proofs with zero-cycle
+                        overhead.</p>
+                </div>
+                <div class="card" style="padding: 1.5rem;">
+                    <h3 style="font-size: 0.8rem;">The PM</h3>
+                    <p style="font-size: 0.7rem; opacity: 0.6;">Accelerates roadmap with a 42% Trust ROI dividend.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: COMMAND CONSOLE -->
+        <section class="slide">
+            <div class="tag">Institutional Interface</div>
+            <h2>Sovereign<br>Command Console</h2>
+            <p>Functional, real-time control over the safety lattice. Turning safety from a cost-center into an
+                interactive institutional asset.</p>
+            <div class="card">
+                <h3>Interactive Infrastructure</h3>
+                <p>Policy Dials, Live Trace Matrix, Forensic Vaults, and ROI Monitors are now active on the production
+                    portal.</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: GLOBAL SCALE -->
+        <section class="slide">
+            <div class="tag">The Global Manifest</div>
+            <h2>Global Immunity<br>Architecture</h2>
+            <p>Strategic deployment across regional clusters (Mumbai, Frankfurt, US) with jurisdictional logic collision
+                detection.</p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Sovereign Ledger</h3>
+                    <p>Immutable Proof-of-Behavior auditing.</p>
+                </div>
+                <div class="card">
+                    <h3>Sentinel Node</h3>
+                    <p>Post-Quantum cold storage for long-term audit trails.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: CALL TO ACTION -->
+        <section class="slide" style="text-align: center; align-items: center;">
+            <h1 style="font-size: 6rem;"><span class="emerald">Initialize</span><br>Dominance</h1>
+            <p style="margin-top: 3rem; margin-bottom: 4rem;">Secure your institutional future. Establish the Sovereign
+                Trust Mesh today.</p>
+            <div
+                style="border: 2px solid var(--emerald); padding: 2rem 4rem; font-weight: 900; color: var(--emerald); text-transform: uppercase; letter-spacing: 0.5em;">
+                Enter the Mesh
+            </div>
+        </section>
+    </div>
+
+</body>
+
+</html>

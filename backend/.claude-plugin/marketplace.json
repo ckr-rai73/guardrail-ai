@@ -1,0 +1,27 @@
+{
+    "name": "guardrail-ai",
+    "displayName": "Guardrail.ai - Enterprise Governance",
+    "description": "Enterprise-grade agentic middleware providing real-time compliance oversight, FINRA verifiable auditing, and hits-in-the-loop Veto Protocols.",
+    "version": "1.0.0",
+    "author": "Guardrail Security Inc.",
+    "categories": [
+        "Governance",
+        "Security",
+        "Compliance"
+    ],
+    "capabilities": {
+        "mcpServers": {
+            "guardrail-governance": {
+                "command": "uv",
+                "args": [
+                    "run",
+                    "mcp_registry.py"
+                ],
+                "description": "Dynamically loads permitted agentic tools based on context and evaluates them against regulatory interceptors."
+            }
+        }
+    },
+    "install": {
+        "instructions": "Run '/plugin marketplace add guardrail-ai/sentinel-node' to integrate the middleware into your Claude environment."
+    }
+}

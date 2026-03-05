@@ -1,0 +1,18 @@
+{
+    "cluster_id": "US-SOVEREIGN-01",
+    "region": "us-east-1",
+    "compliance_framework": "NIST-2026-FIPS-203",
+    "fips_verification": "REQUIRED_PER_SESSION",
+    "pqc_endpoints": {
+        "auth": "https://us-east.auth.guardrail.ai/pqc",
+        "auditor": "https://us-east.audit.guardrail.ai/pqc",
+        "ledger": "https://us-east.ledger.guardrail.ai/pqc"
+    },
+    "sovereign_nodes": [
+        "LLAMA-3-70B-US-01",
+        "LLAMA-3-70B-US-02"
+    ],
+    "efi_policy_lock": "HARDWARE_LOCKED",
+    "encryption_at_rest": "AES-GCM-256-PQC-WRAP",
+    "retention_policy": "FEDERAL_RECORDS_ACT_COMPLIANT"
+}

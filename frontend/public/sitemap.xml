@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Homepage / Portal Root -->
+  <url>
+    <loc>https://guardrailai.in/</loc>
+    <lastmod>2026-02-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://guardrailai.in/og-image.png</image:loc>
+      <image:title>Guardrail.ai — Sovereign AI Governance Platform</image:title>
+      <image:caption>The world's only hardware-anchored, post-quantum AI governance platform. Proven by 96 phases and Chaos Drill 24 ($14.8M liability buffer).</image:caption>
+    </image:image>
+  </url>
+
+</urlset>

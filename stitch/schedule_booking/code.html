@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#233c6c",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#14171e",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Smart Scheduling Engine</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 transition-colors duration-300">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Header Section -->
+<div class="flex items-center bg-white dark:bg-slate-900 p-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+<div class="text-primary flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 ml-2">Schedule Service</h2>
+<div class="text-primary flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">help_outline</span>
+</div>
+</div>
+<main class="max-w-xl mx-auto w-full p-4 space-y-6">
+<!-- Calendar Component -->
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-4">
+<div class="flex items-center justify-between mb-4">
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">chevron_left</span>
+</button>
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold">November 2023</p>
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-7 text-center mb-2">
+<p class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider py-2">S</p>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider py-2">M</p>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider py-2">T</p>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider py-2">W</p>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider py-2">T</p>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider py-2">F</p>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider py-2">S</p>
+</div>
+<div class="grid grid-cols-7 gap-1">
+<!-- Placeholder days -->
+<div class="h-10"></div><div class="h-10"></div><div class="h-10"></div>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">1</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">2</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">3</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">4</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg bg-primary text-white font-bold shadow-md">5</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">6</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">7</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">8</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">9</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">10</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">11</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">12</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">13</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">14</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">15</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">16</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-slate-400">17</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-slate-400">18</button>
+<button class="h-10 w-full flex items-center justify-center text-sm rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20">19</button>
+</div>
+</section>
+<!-- Availability Indicators -->
+<section class="space-y-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold leading-tight px-1">Availability Indicators</h3>
+<div class="flex gap-2 flex-wrap">
+<div class="flex h-9 items-center gap-x-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 px-3 border border-emerald-100 dark:border-emerald-800">
+<span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-[18px]">check_circle</span>
+<p class="text-emerald-700 dark:text-emerald-300 text-xs font-semibold">Available</p>
+</div>
+<div class="flex h-9 items-center gap-x-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 px-3 border border-amber-100 dark:border-amber-800">
+<span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-[18px]">warning</span>
+<p class="text-amber-700 dark:text-amber-300 text-xs font-semibold">Limited</p>
+</div>
+<div class="flex h-9 items-center gap-x-2 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-[18px]">block</span>
+<p class="text-slate-600 dark:text-slate-400 text-xs font-semibold">Booked</p>
+</div>
+</div>
+</section>
+<!-- Time Slot Selection -->
+<section class="space-y-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight px-1">Select Time Slot</h3>
+<!-- Morning Slots -->
+<div class="space-y-3">
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-[20px]">light_mode</span>
+<span class="text-sm font-bold uppercase tracking-wider">Morning</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-3 px-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all text-sm font-medium">08:00 AM</button>
+<button class="py-3 px-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all text-sm font-medium">09:30 AM</button>
+<button class="py-3 px-2 rounded-lg bg-white dark:bg-slate-900 border-2 border-primary text-primary font-bold shadow-sm text-sm">11:00 AM</button>
+</div>
+</div>
+<!-- Afternoon Slots -->
+<div class="space-y-3">
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-[20px]">sunny</span>
+<span class="text-sm font-bold uppercase tracking-wider">Afternoon</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-3 px-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all text-sm font-medium">01:30 PM</button>
+<button class="py-3 px-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 opacity-50 cursor-not-allowed flex flex-col items-center justify-center">
+<span class="text-xs font-medium">03:00 PM</span>
+<span class="text-[10px] text-red-500 font-bold">FULL</span>
+</button>
+<button class="py-3 px-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all text-sm font-medium">04:30 PM</button>
+</div>
+</div>
+<!-- Evening Slots -->
+<div class="space-y-3">
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-[20px]">dark_mode</span>
+<span class="text-sm font-bold uppercase tracking-wider">Evening</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-3 px-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all text-sm font-medium">06:00 PM</button>
+<button class="py-3 px-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-primary dark:hover:border-primary transition-all text-sm font-medium">07:30 PM</button>
+<button class="py-3 px-2 rounded-lg bg-slate-100 dark:bg-slate-800 border-none opacity-40 cursor-not-allowed text-sm font-medium">09:00 PM</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Footer Action -->
+<div class="mt-auto p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3 sticky bottom-0">
+<div class="flex justify-between items-center px-1">
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 uppercase font-bold tracking-tight">Selected Service</span>
+<span class="text-sm font-bold text-primary">Full Engine Diagnostics</span>
+</div>
+<div class="text-right">
+<span class="text-xs text-slate-500 uppercase font-bold tracking-tight">Estimated Price</span>
+<p class="text-lg font-bold text-slate-900 dark:text-slate-100">$120.00</p>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+<span>Book Now</span>
+<span class="material-symbols-outlined">calendar_add_on</span>
+</button>
+</div>
+</div>
+</body></html>

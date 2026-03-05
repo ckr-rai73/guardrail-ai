@@ -1,0 +1,25 @@
+{
+    "manifest_version": "1.0",
+    "repository": "guardrail.ai-core",
+    "approved_hooks": [
+        "pre-commit",
+        "pre-push"
+    ],
+    "mcp_settings": {
+        "auto_approve_scopes": [
+            "read:code",
+            "read:docs"
+        ],
+        "blocked_scopes": [
+            "write:db",
+            "write:network_routes"
+        ]
+    },
+    "allowed_ide_plugins": [
+        "claude-plugin",
+        "cursor"
+    ],
+    "signatures": {
+        "ed25519": "MOCK_SIG_BASE64_VALID_xyz"
+    }
+}

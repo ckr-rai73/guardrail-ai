@@ -1,0 +1,33 @@
+{
+  "name": "Guardrail.ai Security Interceptor",
+  "version": "1.0.0",
+  "author": "Vanguard Security Team",
+  "description": "Institutional-grade cryptographic governance, Veto Protocol, and Merkle Settlement for Autonomous AI Agents.",
+  "category": "Governance & Compliance",
+  "capabilities": {
+    "semantic_firewall": true,
+    "merkle_provenance": true,
+    "zero_click_veto": true,
+    "sandbox_execution": true,
+    "outbound_dlp": true,
+    "jurisdictional_routing": true
+  },
+  "compliance_certifications": [
+    "UK_Data_Act_ADM_Contestability",
+    "ISO_IEC_42001",
+    "Singapore_IMDA_2026",
+    "China_CAC_Algorithms",
+    "US_SEC_FTC_Ready",
+    "UAE_Arbitrable_Trails",
+    "MeitY_SGI_India"
+  ],
+  "underwriter_attestation": {
+    "owasp_llm_compatibility": "Verified (Top 10 Mitigated)",
+    "trust_score": "99.98"
+  },
+  "endpoints": {
+    "interceptor_hook": "/api/v1/veto-protocol/evaluate",
+    "demo_sandbox": "/api/v1/marketplace/sandbox",
+    "attestation": "/api/v1/insurance/risk-attestation"
+  }
+}

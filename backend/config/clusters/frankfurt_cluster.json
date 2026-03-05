@@ -1,0 +1,22 @@
+{
+    "cluster_id": "FRANKFURT-SOVEREIGN-01",
+    "region": "eu-central-1",
+    "compliance_framework": "EU-AI-ACT-HIGH-RISK",
+    "conformity_documentation": {
+        "audit_trail_hook": "ENABLED",
+        "transparency_reports": "DAILY_AUTO_GEN",
+        "human_oversight_required": "OODA-LOOP-OR-MPC"
+    },
+    "pqc_endpoints": {
+        "auth": "https://frankfurt.auth.guardrail.ai/pqc",
+        "auditor": "https://frankfurt.audit.guardrail.ai/pqc",
+        "ledger": "https://frankfurt.ledger.guardrail.ai/pqc"
+    },
+    "sovereign_nodes": [
+        "LLAMA-3-70B-FRA-01",
+        "LLAMA-3-70B-FRA-02"
+    ],
+    "efi_policy_lock": "HARDWARE_LOCKED",
+    "encryption_at_rest": "AES-GCM-256-PQC-WRAP",
+    "retention_policy": "GDPR_MAX_24_MONTHS"
+}
