@@ -33,6 +33,7 @@ class BoardReportGenerator:
                 "[EU AI Act Art. 4a]: Transparency for general-purpose AI systems.",
                 "[FINRA Rule 4511]: Preservation of records and audit trail integrity.",
                 "[MeitY Advisory 2024]: Provenance of synthetic information and SGI labeling."
+            ]
             
             # Phase 107: LLM Evaluation Metrics
             try:
