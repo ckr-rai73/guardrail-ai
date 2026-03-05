@@ -7,6 +7,12 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      test_file:
+        description: 'Specific test file to run (e.g., backend/adversarial_test_phase102_generation.py). Leave blank to run all.'
+        required: false
+        type: string
 
 jobs:
   test:
@@ -37,30 +43,40 @@ jobs:
         failed=0
         
         # Loop through all adversarial test scripts in the backend directory
-        for test_file in backend/adversarial_test_*.py; do
-          if [ -f "$test_file" ]; then
-            echo "=================================================="
-            echo "Running $test_file..."
-            echo "=================================================="
-            if python "$test_file"; then
-              echo "[PASS] $test_file"
-            else
-              echo "[FAIL] $test_file"
-              failed=1
-            fi
-            echo ""
+        if [ -n "${{ github.event.inputs.test_file }}" ]; then
+          echo "Running specific test: ${{ github.event.inputs.test_file }}"
+          if python "${{ github.event.inputs.test_file }}"; then
+            echo "[PASS] ${{ github.event.inputs.test_file }}"
+          else
+            echo "[FAIL] ${{ github.event.inputs.test_file }}"
+            failed=1
           fi
-        done
-        
-        # Also run committee test
-        echo "=================================================="
-        echo "Running backend/adversarial_committee_test.py..."
-        echo "=================================================="
-        if python backend/adversarial_committee_test.py; then
-          echo "[PASS] backend/adversarial_committee_test.py"
         else
-          echo "[FAIL] backend/adversarial_committee_test.py"
-          failed=1
+          for test_file in backend/adversarial_test_*.py; do
+            if [ -f "$test_file" ]; then
+              echo "=================================================="
+              echo "Running $test_file..."
+              echo "=================================================="
+              if python "$test_file"; then
+                echo "[PASS] $test_file"
+              else
+                echo "[FAIL] $test_file"
+                failed=1
+              fi
+              echo ""
+            fi
+          done
+          
+          # Also run committee test
+          echo "=================================================="
+          echo "Running backend/adversarial_committee_test.py..."
+          echo "=================================================="
+          if python backend/adversarial_committee_test.py; then
+            echo "[PASS] backend/adversarial_committee_test.py"
+          else
+            echo "[FAIL] backend/adversarial_committee_test.py"
+            failed=1
+          fi
         fi
         
         # Determine overall result
