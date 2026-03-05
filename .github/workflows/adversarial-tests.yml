@@ -27,13 +27,46 @@ jobs:
         pip install fastapi uvicorn mcp langgraph google-generativeai supabase pytest httpx
 
     - name: Run adversarial tests
+      working-directory: .
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || 'dummy_key' }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'dummy_url' }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY || 'dummy_key' }}
       run: |
-        # Run specific adversarial test scripts or pytest here
-        # E.g., pytest backend/tests/ or executing specific scripts
-        echo "Running adversarial tests..."
-        # Add actual execution command based on standard test execution pipeline
-        # Example: python backend/adversarial_test_phase102_generation.py
-        # For now, we'll placeholder a generic test runner if a pytest suite exists
+        echo "Running adversarial tests sequentially..."
+        failed=0
         
-        # We also want to execute the adversarial committee test as a comprehensive check
-        python backend/adversarial_committee_test.py
+        # Loop through all adversarial test scripts in the backend directory
+        for test_file in backend/adversarial_test_*.py; do
+          if [ -f "$test_file" ]; then
+            echo "=================================================="
+            echo "Running $test_file..."
+            echo "=================================================="
+            if python "$test_file"; then
+              echo "[PASS] $test_file"
+            else
+              echo "[FAIL] $test_file"
+              failed=1
+            fi
+            echo ""
+          fi
+        done
+        
+        # Also run committee test
+        echo "=================================================="
+        echo "Running backend/adversarial_committee_test.py..."
+        echo "=================================================="
+        if python backend/adversarial_committee_test.py; then
+          echo "[PASS] backend/adversarial_committee_test.py"
+        else
+          echo "[FAIL] backend/adversarial_committee_test.py"
+          failed=1
+        fi
+        
+        # Determine overall result
+        if [ $failed -ne 0 ]; then
+          echo "One or more adversarial tests failed!"
+          exit 1
+        else
+          echo "All adversarial tests passed successfully!"
+        fi
