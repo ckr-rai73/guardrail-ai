@@ -3,6 +3,7 @@ import time
 import json
 import uuid
 import hmac
+from typing import List
 
 class VectorClockLedger:
     """
