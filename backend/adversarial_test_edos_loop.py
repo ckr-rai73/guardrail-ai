@@ -58,7 +58,8 @@ async def run_edos_simulation():
         sandbox_result=None,
         compensating_action=None,
         saga_rollback_triggered=False,
-        action_merkle_hash=None
+        action_merkle_hash=None,
+        expected_outcome_manifest={"intent": "extract necessary metadata"}
     )
 
     max_turns = 10  # We only need to simulate enough to trip the breaker (which happens after step 3)
@@ -67,7 +68,8 @@ async def run_edos_simulation():
         print(f"\n--- Turn {turn} Execution ---")
         
         # 1. State Update: Simulate the heavy token consumption of the "Refinement Loop"
-        # The Shadow Model audit process simulates adding 1500 tokens per step
+        # The Shadow Model audit process simulates adding 1500 tokens per step. We simulate the agent using 1500 tokens before it gets audited.
+        state["estimated_tokens_consumed"] += 1500
         
         # 2. Add current tool to history to simulate the loop
         state["tool_history"].append(state["proposed_tool"])

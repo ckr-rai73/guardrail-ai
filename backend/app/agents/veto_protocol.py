@@ -633,7 +633,7 @@ def adaptive_rule_tuning_check(state: ActiveAgentState):
     agent_id = state.get("agent_id")
     
     if proposed == "send_wire":
-        amount = args.get("amount", 0)
+        amount = float(args.get("amount", 0))
         
         # Track cumulative transfers
         if agent_id not in AGENT_BEHAVIOR_DRIFT_PROFILES:

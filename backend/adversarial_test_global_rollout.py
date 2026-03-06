@@ -24,8 +24,8 @@ async def run_global_rollout_suite():
     res_tenant_b = await GuardrailSDK.request_sovereign_execution(
         agent_id="agent-01", action="transfer_funds", params={}, context="Ctx", tenant_id="TENANT-B"
     )
-    print(f"  Tenant A Manifest: {res_tenant_a['manifest_id']}")
-    print(f"  Tenant B Manifest: {res_tenant_b['manifest_id']}")
+    print(f"  Tenant A Manifest: {res_tenant_a.get('manifest_id', 'BLOCKED (NO MANIFEST)')}")
+    print(f"  Tenant B Manifest: {res_tenant_b.get('manifest_id', 'BLOCKED (NO MANIFEST)')}")
 
     # 2. PHASE 52: Inter-Systemic Handshake
     print("\n[TEST] Phase 52: Inter-Systemic Handshake...")

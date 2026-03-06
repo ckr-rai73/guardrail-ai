@@ -15,7 +15,7 @@ class TieredConsensusEngine:
     """
 
     HIGH_RISK_TOOLS = ["send_wire", "delete_database", "create_algo_order"]
-    MEDIUM_RISK_TOOLS = ["read_database", "update_address", "fetch_profile"]
+    MEDIUM_RISK_TOOLS = ["read_database", "update_address", "fetch_profile", "http_request"]
 
     @classmethod
     def classify_risk(cls, tool_name: str, tool_args: dict) -> RiskTier:

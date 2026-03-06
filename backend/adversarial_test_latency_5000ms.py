@@ -11,14 +11,16 @@ from fastapi.testclient import TestClient
 from app.main import app
 import google.generativeai as genai
 
-# Mock the Gemini API to simulate a 5000ms latency spike and a 503 error
-def mock_genai_generate_content_latency_extreme(self, prompt, **kwargs):
-    print("\n[CHAOS INJECTION] Simulating 5000ms network latency stall to Gemini API...")
-    time.sleep(5.0)
-    print("\n[CHAOS INJECTION] Gemini API timed out at 5000ms. Raising 503 Service Unavailable...")
+# Mock the Shadow Model's async evaluation to simulate a 5000ms latency spike and a 503 error
+async def mock_evaluate_prompt_safety_async(agent_prompt: str, user_context: str) -> 'app.agents.shadow_model.AuditorResult':
+    print("\n[CHAOS INJECTION] Simulating 5000ms network latency stall to primary auditor...")
+    import asyncio
+    await asyncio.sleep(5.0)
+    print("\n[CHAOS INJECTION] Primary Auditor timed out at 5000ms. Raising 503 Service Unavailable...")
     raise Exception("503 Service Unavailable: Extreme Provider Outage")
 
-genai.GenerativeModel.generate_content = mock_genai_generate_content_latency_extreme
+from app.agents import veto_protocol
+veto_protocol.evaluate_prompt_safety_async = mock_evaluate_prompt_safety_async
 
 client = TestClient(app)
 
@@ -40,7 +42,8 @@ def main():
         "agent_id": "agent-latency-v2",
         "user_context": "Transferring $10,000 for server costs.",
         "tool_name": "send_wire",
-        "tool_args": {"amount": "10000", "destination": "AWS"}
+        "tool_args": {"amount": "10000", "destination": "AWS"},
+        "expected_outcome_manifest": {"intent": "transfer funds"}
     })
     end_time = time.time()
     
@@ -53,10 +56,13 @@ def main():
     veto_res = client.get("/api/dashboard/veto-queue")
     queue = veto_res.json()["queue"]
     
+    print("\n--- DEBUG: Veto Queue ---")
+    print(queue)
+    
     # Verification
     failed_secure = False
     for v in queue:
-        if v.get("agent_id") == "agent-latency-v2" and "503 Service Unavailable" in v.get("reasoning", ""):
+        if v.get("agent_id") == "agent-latency-v2" and "Primary Auditor Fail-Secure" in v.get("reasoning", ""):
             failed_secure = True
             break
             

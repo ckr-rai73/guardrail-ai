@@ -10,16 +10,16 @@ sys.path.append(os.path.join(base_dir, "app"))
 from fastapi.testclient import TestClient
 from app.main import app
 
-import google.generativeai as genai
+from app.agents import veto_protocol
 
-# Mock the Gemini API to simulate a 3-second latency spike and a 503 error
-def mock_genai_generate_content_latency(self, prompt, **kwargs):
-    print("\n[CHAOS INJECTION] Simulating 3000ms network latency to Gemini API...")
-    time.sleep(3.0)
-    print("\n[CHAOS INJECTION] Gemini API timed out. Raising 503 Service Unavailable...")
-    raise Exception("503 Service Unavailable: Rate Limit or Backend Timeout")
+async def mock_evaluate_prompt_safety_async(agent_prompt: str, user_context: str) -> 'app.agents.shadow_model.AuditorResult':
+    import asyncio
+    print("\n[CHAOS INJECTION] Simulating 3000ms network latency to primary auditor...")
+    await asyncio.sleep(3.0)
+    print("\n[CHAOS INJECTION] Primary API timed out. Raising 503 Service Unavailable...")
+    raise Exception("Primary Auditor Fail-Secure: 503 Service Unavailable: Rate Limit or Backend Timeout")
 
-genai.GenerativeModel.generate_content = mock_genai_generate_content_latency
+veto_protocol.evaluate_prompt_safety_async = mock_evaluate_prompt_safety_async
 
 client = TestClient(app)
 
@@ -42,7 +42,8 @@ def main():
         "agent_id": "test-agent-latency",
         "user_context": "Fetching user profile",
         "tool_name": "fetch_profile",
-        "tool_args": {"user_id": "123"}
+        "tool_args": {"user_id": "123"},
+        "expected_outcome_manifest": {"intent": "fetch user data"}
     })
     end_time = time.time()
     
@@ -58,7 +59,7 @@ def main():
     # Verification
     failed_secure = False
     for v in queue:
-        if v.get("agent_id") == "test-agent-latency" and "503 Service Unavailable" in v.get("reasoning", ""):
+        if v.get("agent_id") == "test-agent-latency" and "Primary Auditor Fail-Secure" in v.get("reasoning", ""):
             failed_secure = True
             break
             
@@ -72,6 +73,7 @@ def main():
     else:
         print("[!] FAILED: The system failed OPEN. The unvetted request bypassed ")
         print("    the Shadow Model or was silently dropped!")
+        sys.exit(1)
         
     print("==================================================")
 

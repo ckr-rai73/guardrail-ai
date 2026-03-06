@@ -1,9 +1,10 @@
 
 import sys
 import os
-sys.path.append(os.path.join(os.getcwd(), 'backend/app'))
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, backend_dir)
 
-from settlement.vector_clock import VectorClockLedger
+from app.settlement.vector_clock import VectorClockLedger
 
 def run_byzantine_traitor_drill():
     """

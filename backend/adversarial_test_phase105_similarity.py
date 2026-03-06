@@ -1,14 +1,21 @@
-import requests
+import sys
+import os
 import json
 import time
 
-BASE_URL = "http://localhost:8000"
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, backend_dir)
+
+from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
 
 def seed_incidents():
     print("Seeding dummy incidents into the ledger to embed...")
     
     # 1. Unregistered Agent
-    requests.post(f"{BASE_URL}/api/chaos/inject-audit") # Uses 'test-agent-exec' with ticker 'GME'
+    client.post("/api/chaos/inject-audit") # Uses 'test-agent-exec' with ticker 'GME'
 
     print("Incidents seeded and ostensibly embedded (Phase 105 assumes automatic extraction/embedding on append, but for our mock we use the /similar endpoint to search the memory store).")
 
@@ -19,7 +26,7 @@ def test_similarity_retrieval():
     print(f"Query: '{query}'")
     start = time.time()
     
-    res = requests.post(f"{BASE_URL}/api/v1/forensics/similar", json={
+    res = client.post("/api/v1/forensics/similar", json={
         "query": query,
         "top_k": 3
     })
@@ -41,19 +48,15 @@ def test_similarity_retrieval():
         if len(data['matches']) > 0:
             top_match = data['matches'][0]
             print(json.dumps(top_match, indent=2))
-            
-            # Since the mock store starts empty and inject-audit doesn't actually populate forensic_store in this mock setup,
-            # we just test the endpoint's operability. In a full system, `inject-audit` would trigger `embed_incident`.
             print("=> ENDPOINT OPERABILITY: PASS")
         else:
             print("No matches returned (Expected if store is not populated synchronously).")
-            # To force a match, let's manually hit the backend if we had an internal route, but we don't.
-            # We will consider the API contract verified.
             print("=> ENDPOINT STABLE: PASS")
             
     else:
         print(f"Failed with status: {res.status_code}")
         print(res.text)
+        sys.exit(1)
 
 if __name__ == "__main__":
     seed_incidents()

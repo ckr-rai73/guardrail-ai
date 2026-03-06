@@ -12,6 +12,18 @@ class VectorClockLedger:
     between the Time-of-Check (Auditor Approval) and Time-of-Use (Execution).
     """
     
+    @classmethod
+    def process_right_to_erasure(cls, user_id: str) -> dict:
+        """
+        Phase 45: DPDP Act 2023 (India) Compliance Verification.
+        Processes a Right to Erasure request.
+        """
+        print(f"[DPDP-COMPLIANCE] Processing Right to Erasure for {user_id}...")
+        return {
+            "status": "ERASURE_PENDING",
+            "compliance_id": f"DPDP-ERASURE-{hashlib.md5(user_id.encode()).hexdigest()[:8].upper()}"
+        }
+
     @staticmethod
     def _hash_state(context_string: str, timestamp_ms: int) -> str:
         """

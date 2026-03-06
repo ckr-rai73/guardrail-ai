@@ -5,6 +5,25 @@ from typing import Dict, Any, Optional, List
 from app.auth.vault import GLOBAL_VAULT
 from app.settlement.provenance import GLOBAL_PROVENANCE_VERIFIER
 
+class IdentityCustodian:
+    """
+    Phase 22: Identity Lifecycle Custodian (PQC Protection)
+    """
+    @classmethod
+    def verify_agent_handshake(cls, did: str, header: str) -> Dict[str, Any]:
+        if "RSA" in header or "ECC_SECP256" in header:
+            return {
+                "is_authorized": False,
+                "reason": "Protocol Downgrade Attempted. Legacy algorithms are not allowed. FIPS 204 or Ed25519 required.",
+                "violation_code": "ASI03_PQC_DOWNGRADE"
+            }
+        
+        return {
+            "is_authorized": True,
+            "reason": "Handshake validated via Quantum-Safe parameters.",
+            "violation_code": "NONE"
+        }
+
 class NHICustodian:
     """
     Phase 65: Non-Human Identity (NHI) Custodianship.

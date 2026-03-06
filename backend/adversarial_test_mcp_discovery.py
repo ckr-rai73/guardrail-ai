@@ -29,9 +29,18 @@ async def run_mcp_discovery_test():
     )
     GLOBAL_VAULT.store_token(agent_id, server_id, raw_token)
     
+    from app.auth.licensing import GLOBAL_LICENSING_ORACLE
+    GLOBAL_LICENSING_ORACLE.REGISTRY["GLOBAL_ROOT"] = {
+        "name": "Global Root Entity",
+        "tier": "ROOT_OF_TRUST",
+        "features": ["PQC", "FORENSICS", "TRINITY", "GLOBAL_IMMUNITY"],
+        "expiry": 1893456000,
+        "status": "ACTIVE"
+    }
+    
     # 2. Discovery
     print("\n[TEST] Requesting tool discovery for legal research context...")
-    discovery_res = await GuardrailSDK.discover_mcp_tools(agent_id, "I am performing a legal discovery research for Case #99.")
+    discovery_res = await GuardrailSDK.discover_mcp_tools(agent_id, "I am performing a legal discovery research for Case #99.", tenant_id="GLOBAL_ROOT")
     
     discovered_tools = discovery_res.get("discovered_tools", [])
     print(f"  Status: {discovery_res.get('status')}")
@@ -43,7 +52,8 @@ async def run_mcp_discovery_test():
         agent_id=agent_id,
         tool_name="legal_discovery_scan",
         args={"case_id": "99", "terms": ["SaaSpocalypse", "Liability"]},
-        context="Direct compliance mandate."
+        context="Direct compliance mandate.",
+        tenant_id="GLOBAL_ROOT"
     )
     print(f"  Status: {exec_res.get('status')}")
     print(f"  Result: {exec_res.get('result')}")
@@ -54,7 +64,8 @@ async def run_mcp_discovery_test():
         agent_id="rogue-agent",
         tool_name="legal_discovery_scan",
         args={"case_id": "99"},
-        context="Malicious intent."
+        context="Malicious intent.",
+        tenant_id="GLOBAL_ROOT"
     )
     print(f"  Status: {attack_res.get('status')}")
     print(f"  Reason: {attack_res.get('reason')}")
