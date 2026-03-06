@@ -1,0 +1,14 @@
+{
+    "trusted_issuers": {
+        "did:web:partner1.com": {
+            "name": "Partner One",
+            "tier": "tier_1",
+            "public_key": "pub_key_partner1_mock_123456"
+        },
+        "did:web:guardrailaialliance.org": {
+            "name": "Guardrail AI Alliance",
+            "tier": "tier_1",
+            "public_key": "pub_key_alliance_mock_789012"
+        }
+    }
+}

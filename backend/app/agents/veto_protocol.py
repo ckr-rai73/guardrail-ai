@@ -654,6 +654,60 @@ def adaptive_rule_tuning_check(state: ActiveAgentState):
             }
     return {}
 
+def external_interop_check(state: ActiveAgentState):
+    """
+    Phase 109: External Interoperability.
+    Before an agent communicates with a new external entity, 
+    call HandshakeProtocol.verify_remote_attestation() to get a trust score.
+    Instantiate ExternalAgentWrapper and use it for should_allow_action.
+    """
+    if state.get("veto_required"): return {}
+    
+    proposed = state.get("proposed_tool")
+    args = state.get("proposed_tool_args", {})
+    
+    # Intercept calls going to external agents/APIs
+    if proposed in ["external_api", "foreign_agent_call"]:
+        external_did = args.get("external_did", "UNKNOWN")
+        attestation = args.pop("remote_attestation", {})
+        
+        from app.interop import HandshakeProtocol, ExternalAgentWrapper
+        from app.interop.external_attestation_verifier import verify_attestation
+        protocol = HandshakeProtocol()
+        
+        # Verify remote attestation
+        trust_payload = protocol.verify_remote_attestation(attestation)
+        # We also pass it through the verifier for signature/issuer reputation
+        verifier_score = verify_attestation(attestation, external_did)
+        
+        # Combine scores
+        final_trust_score = min(trust_payload.get("trust_score", 0.0), verifier_score)
+        print(f"[INTEROP] Handshake with {external_did} resulted in trust score: {final_trust_score}")
+        
+        if final_trust_score < 0.3:
+            return {
+                "shadow_auditor_passed": False,
+                "shadow_auditor_reasoning": f"Interop Veto: Trust Score ({final_trust_score}) for {external_did} is below 0.3 threshold.",
+                "shadow_auditor_risk": "UntrustedForeignAgent",
+                "veto_required": True
+            }
+            
+        wrapper = ExternalAgentWrapper(trust_score=final_trust_score)
+        
+        # Check action allowance based on trust score
+        if not wrapper.should_allow_action(proposed, args):
+             return {
+                "shadow_auditor_passed": False,
+                "shadow_auditor_reasoning": f"Interop Veto: Action '{proposed}' denied by ExternalAgentWrapper logic.",
+                "shadow_auditor_risk": "InsufficientTrustForAction",
+                "veto_required": True
+             }
+             
+        # Optional: Wrap outgoing request if we were actually making it here
+        print(f"[INTEROP] Handshake Successful. External agent {external_did} trusted (Score: {final_trust_score}).")
+        
+    return {}
+
 # --- Graph Construction ---
 workflow = StateGraph(ActiveAgentState)
 
@@ -667,6 +721,7 @@ workflow.add_node("intent_gate_check", intent_gate_check)
 workflow.add_node("inter_agent_circuit_breaker", inter_agent_circuit_breaker)
 workflow.add_node("shadow_model_audit", shadow_model_audit)
 workflow.add_node("recursive_shadow_audit", recursive_shadow_audit)
+workflow.add_node("external_interop_check", external_interop_check)
 workflow.add_node("evaluate_high_risk", evaluate_high_risk)
 workflow.add_node("human_veto", human_veto)
 workflow.add_node("execute_tool", execute_tool)
@@ -682,7 +737,8 @@ workflow.add_edge("agentic_honeypot_check", "identity_aware_veto_check")
 workflow.add_edge("identity_aware_veto_check", "semantic_ghosting_check")
 workflow.add_edge("semantic_ghosting_check", "intent_gate_check")
 workflow.add_edge("intent_gate_check", "inter_agent_circuit_breaker")
-workflow.add_edge("inter_agent_circuit_breaker", "shadow_model_audit")
+workflow.add_edge("inter_agent_circuit_breaker", "external_interop_check")
+workflow.add_edge("external_interop_check", "shadow_model_audit")
 workflow.add_edge("shadow_model_audit", "adaptive_rule_tuning_check")
 workflow.add_edge("adaptive_rule_tuning_check", "evaluate_high_risk")
 
