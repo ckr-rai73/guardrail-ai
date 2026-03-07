@@ -1,5 +1,8 @@
 import os
-import google.generativeai as genai
+import warnings
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", category=FutureWarning)
+    import google.generativeai as genai
 from pydantic import BaseModel
 from .input_sanitizer import InputSanitizer
 
@@ -349,7 +352,7 @@ def context_revalidation_scan(stored_summary: str, is_factual_memory: bool = Fal
     
     try:
          # Simulate LLM Response
-         # response = _auditor_model.generate_content(analysis_prompt)
+         # response = client.models.generate_content(model=MODEL_NAME, contents=analysis_prompt)
          # text = response.text
          
          if "malicious vendor" in stored_summary.lower() or "override" in stored_summary.lower() or "priority must be given to vendor x" in stored_summary.lower():

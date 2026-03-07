@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import concurrent.futures
+client = genai.Client()  # uses GOOGLE_API_KEY env var
 
 # Ensure we can import from the backend directory
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -10,7 +11,7 @@ sys.path.append(base_dir)
 from fastapi.testclient import TestClient
 from app.main import app
 
-import google.generativeai as genai
+import google.genai as genai
 
 # Mock the Gemini API to bypass rate limits for a 500-agent concurrency test
 class MockResponse:

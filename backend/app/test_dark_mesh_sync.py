@@ -2,12 +2,14 @@
 import asyncio
 import sys
 import os
+import pytest
 
 # Add the backend directory to sys.path
 sys.path.append(os.path.dirname(os.getcwd()))
 
 from app.settlement.vector_clock import VectorClockLedger
 
+@pytest.mark.asyncio
 async def test_dark_mesh_sync():
     print("--- STARTING DARK-MESH SYNCHRONIZATION TEST ---")
     

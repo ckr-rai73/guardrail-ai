@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+import pytest
 
 # Add the backend and app directory to sys.path
 backend_dir = os.path.dirname(os.path.abspath(__file__))
@@ -10,6 +11,7 @@ sys.path.insert(0, backend_dir)
 
 from main import veto_pipeline
 
+@pytest.mark.asyncio
 async def test_dlp_integration():
     print("==================================================")
     print("DLP INTEGRATION TEST: Outbound Secret Scrubbing")

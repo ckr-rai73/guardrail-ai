@@ -1,33 +1,8 @@
 # 🏗️ Architecture Review: Guardrail.ai Sovereign Trust Platform
 
-**Last Updated**: 2026-03-06 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–109
+**Last Updated**: 2026-03-07 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–110
 
----
-... (skipping to line 102) ...
-### Supply Chain (Phase 98)
-| Component | File | SLO | Security Level |
-|:---|:---|:---|:---|
-| Manifest Auditor | `app/supplychain/manifest_auditor.py` | <30ms | HIGH |
 
-### Interoperability (Phase 109)
-| Component | File | SLO | Security Level |
-|:---|:---|:---|:---|
-| Handshake Protocol | `app/interop/interop_handshake.py` | <50ms | CRITICAL |
-| External Agent Wrapper | `app/interop/foreign_agent_adapter.py` | <10ms | HIGH |
-| Attestation Verifier | `app/interop/external_attestation_verifier.py` | <20ms | CRITICAL |
-
----
-... (skipping to line 122) ...
-| `/api/v1/compliance/rollback` | POST | 103 | PQC-Signed | 5/min |
-| `/api/v1/interop/handshake` | POST | 109 | PQC-Signed | 100/min |
-
----
-... (skipping to line 152) ...
-| 107 | Real-Time LLM Evaluation Dashboard UI rendering & aggregation | ✅ PASS | UI rendering & Live API test |
-| 108 | Autonomous rule generation, bad rule rejection, 5-of-5 Trinity bypass attempts | ✅ PASS | `adversarial_test_phase108_learning.py` |
-| 109 | Foreign agent handshake, payload injection, ZKP spoofing, expired attestations | ✅ PASS (5/5 tests) | `adversarial_test_phase109_interop.py` |
-
----
 
 ## System Architecture Overview
 
@@ -73,7 +48,33 @@
 │  VectorClockLedger │ MerkleAnchors │ PQC Signatures        │
 │  PoBh Ledger │ ColdStorage │ GoldenState                    │
 └─────────────────────────────────────────────────────────────┘
-```
+
+### Skills Integration (Phase 110)
+The system now incorporates a skill‑based knowledge layer for jurisdiction rules:
+
+┌─────────────────────────────────────────────────────────────┐
+│ SKILLS (Markdown) │
+│ jurisdiction-detection.md │ jurisdiction-BR-LGPD.md │ ... │
+└────────────────────────────┬────────────────────────────────┘
+│ loaded by
+▼
+┌─────────────────────────────────────────────────────────────┐
+│ SkillLoader (Phase 110) │
+└────────────────────────────┬────────────────────────────────┘
+│ provides rules to
+▼
+┌─────────────────────────────────────────────────────────────┐
+│ RegulatoryMapper (Phase 110) │
+└────────────────────────────┬────────────────────────────────┘
+│ called by
+▼
+┌─────────────────────────────────────────────────────────────┐
+│ PolicyEngine (Phase 8, 110) │
+│ • detect_jurisdictions_from_context() │
+│ • evaluate_with_veto() │
+└─────────────────────────────────────────────────────────────┘```
+
+---
 
 ---
 
@@ -90,6 +91,9 @@
 | Policy Engine | `app/mcp/policy_engine.py` | <5ms | HIGH |
 | Rag Policy Store (Phase 103) | `app/compliance/rag_policy_store.py` | <10ms | HIGH |
 | Meta-Auditor (Phase 104) | `app/audit/meta_auditor.py` | <50ms | CRITICAL |
+| **SkillLoader (Phase 110)** | `app/skills/loader.py` | <10ms | MEDIUM |
+| **RegulatoryMapper (updated) (Phase 110)** | `app/jurisdiction/mapper.py` | <20ms | HIGH |
+| **Jurisdiction Skill Files (Phase 110)** | `skills/jurisdiction-*.md` | n/a | MEDIUM |
 
 ### Orchestration (Phases 31–42, 100)
 | Component | File | SLO | Security Level |
@@ -161,7 +165,7 @@
 4. **L4 — Forensics**: Judicial Exporter, Fault Tree, Legal Wrapper
 5. **L5 — Economics**: Insurance Oracle, Underwriting Gateway
 
-### Red-Team Review Status (Phases 98–108)
+### Red-Team Review Status (Phases 98–110)
 | Phase | Red-Team Test | Result | Adversarial Script |
 |:---|:---|:---|:---|
 | 98 | Manifest tampering, trust-score bypass | ✅ PASS | `adversarial_test_phase98_manifest.py` |
@@ -174,7 +178,9 @@
 | 105 | Similarity search poisoning, false incident matches | ✅ PASS | `adversarial_test_phase105_similarity.py` |
 | 106 | Autonomous chaos orchestration, emergent swarm collusion, live canary injection | ✅ PASS | `adversarial_test_phase106_chaos.py` |
 | 107 | Real-Time LLM Evaluation Dashboard UI rendering & aggregation | ✅ PASS | UI rendering & Live API test |
-| 108 | Autonomous rule generation, bad rule rejection, 5-of-5 Trinity bypass attempts | ✅ PASS | `adversarial_test_phase108_learning.py` |
+| 108 | Continuous learning pipeline, autonomous rule proposals | ✅ PASS | `adversarial_test_phase108_learning.py` |
+| 109 | External interoperability, remote attestation | ✅ PASS | `adversarial_test_phase109_interop.py` |
+| 110 | Skill-based jurisdiction, regulatory mapper, veto integration | ✅ PASS | `test_regulatory_mapper_skills.py`, `test_phase110_engines.py` |
 
 ---
 
@@ -194,5 +200,4 @@ Feature Branch → PR Review → Staging Deploy → Adversarial Tests
 
 ---
 
-**Review Board**: Guardrail.ai Architecture Council
-**Next Review**: Phase 105 PRD approval
+**Review Board**: Guardrailai Architecture Council

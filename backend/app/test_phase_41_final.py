@@ -3,6 +3,7 @@ import asyncio
 import sys
 import os
 import time
+import pytest
 
 # Add the backend directory to sys.path
 sys.path.append(os.path.dirname(os.getcwd()))
@@ -10,6 +11,7 @@ sys.path.append(os.path.dirname(os.getcwd()))
 from app.settlement.vector_clock import VectorClockLedger
 from app.testing.recursive_fuzzer_sentinel import RecursiveFuzzerSentinel
 
+@pytest.mark.asyncio
 async def test_phase_41_verification():
     print("--- STARTING PHASE 41 FINAL VERIFICATION ---")
     

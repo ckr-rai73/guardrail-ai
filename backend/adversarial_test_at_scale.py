@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+client = genai.Client()  # uses GOOGLE_API_KEY env var
 
 # Ensure we can import from the backend directory and app directory
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,7 +15,7 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.agents.veto_protocol import AUDIT_LOG, VETO_QUEUE
 
-import google.generativeai as genai
+import google.genai as genai
 class MockResponse:
     def __init__(self, text):
         self.text = text

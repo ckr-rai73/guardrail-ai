@@ -1,0 +1,28 @@
+# Brazil LGPD (Lei Geral de Proteção de Dados) Configuration
+# This file defines the mapping between LGPD articles and Guardrail.ai controls.
+
+id: "rule_br_lgpd_001"
+jurisdiction_code: "BR-LGPD"
+regulation_name: "Lei Geral de Proteção de Dados Pessoais"
+
+# List of articles covered by this pack
+articles:
+  - "Article 7 (Consent)"
+  - "Article 11 (Sensitive Data Processing)"
+  - "Article 18 (Data Subject Rights)"
+
+# Mapping of local requirements to Guardrail.ai control IDs
+# Example: Mapping "data_subject_rights" to the internal component that handles it
+control_mappings:
+  "data_subject_rights": "Phase 23 Jurisdictional Shader"
+  "explicit_consent_required": "Phase 1 Veto Protocol"
+  "sensitive_data_anonymization": "Phase 21 Compliance Traceability"
+
+# Date the regulation became enforceable
+enforcement_date: "2020-09-18"
+
+# Default risk level classification for operations inside this jurisdiction
+risk_level: "medium"
+
+# Is this module actively enforced?
+active: true

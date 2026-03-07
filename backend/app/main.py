@@ -2,6 +2,7 @@ import os
 import uuid
 import time
 import asyncio
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import JSONResponse
 import pydantic
@@ -63,7 +64,19 @@ from app.metrics.llm_evaluation import router as llm_metrics_router
 # Load environment variables from .env file
 load_dotenv()
 
-app = FastAPI(title="Sentinel Node Gateway", version="1.0.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup code
+    print("Starting up...")
+    print("[SYSTEM] Starting Autonomous SLA Monitor Background Task...")
+    asyncio.create_task(sla_monitor_loop())
+    # (e.g., initialize database connections, load models)
+    yield
+    # Shutdown code
+    print("Shutting down...")
+    # (e.g., close connections)
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(llm_metrics_router, prefix="/api/v1")
 
 # --- Regulatory Interceptor: SEBI Algorithms (India) ---
@@ -260,11 +273,6 @@ async def sla_monitor_loop():
         except Exception as e:
             print(f"[SLA MONITOR ERROR] {e}")
         await asyncio.sleep(60) # Scan every 60 seconds
-
-@app.on_event("startup")
-async def start_sla_monitor():
-    print("[SYSTEM] Starting Autonomous SLA Monitor Background Task...")
-    asyncio.create_task(sla_monitor_loop())
 
 @app.post("/api/chaos/age-veto-queue")
 def chaos_age_veto_queue(hours: float = 4.0):

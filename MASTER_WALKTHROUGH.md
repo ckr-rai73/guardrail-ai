@@ -1,6 +1,6 @@
-# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–109)
+# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–110)
 
-**Last Updated**: 2026-03-06 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 109/109
+**Last Updated**: 2026-03-07 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 110/110
 
 ---
 
@@ -81,7 +81,7 @@
 
 ---
 
-## 🚀 Advanced Phases (98–108): Frontier Capabilities
+## 🚀 Advanced Phases (98–110): Multi-Jurisdiction Expansion Pack
 
 | Phase | Capability | Key Modules | Verification |
 |:---:|:---|:---|:---|
@@ -97,6 +97,9 @@
 | 107 | **Real-Time LLM Evaluation Dashboard** — C-suite visibility & board reporting | `llm_evaluation.py`, `board_report.py`, `HeatmapScreen.dart` | `Manual Verification` |
 | 108 | **Unified Integration & Continuous Learning** — autonomous 5-of-5 Trinity rule proposals | `continuous_learning_pipeline.py`, `shadow_amendment.py` | `adversarial_test_phase108_learning.py` |
 | 109 | **External Interoperability** — remote attestation & zero-knowledge trust handshakes | `interop_handshake.py`, `foreign_agent_adapter.py` | `adversarial_test_phase109_interop.py` |
+| 110 | **Multi-Jurisdiction Expansion Pack** — skill-based jurisdiction detection, regulatory mapper with required controls, veto integration | `jurisdiction-detection.md`, `SkillLoader`, `RegulatoryMapper`, `policy_engine.py` | `test_regulatory_mapper_skills.py`, `test_phase110_engines.py`, all tests pass |
+
+**Phase 110 (Multi‑Jurisdiction Expansion Pack)** introduced a fully externalized, skill‑based jurisdiction system. Instead of hardcoding mapping rules and control requirements in Python, all jurisdiction knowledge now lives in version‑controlled Markdown files under `skills/`. The `SkillLoader` parses these files, and `RegulatoryMapper` provides required controls based on jurisdiction code. The `PolicyEngine` uses this to detect applicable jurisdictions from context (user location, data residency) and trigger a veto if mandatory controls are missing. This token‑saving architecture aligns with the industry shift toward separating "knowledge" from "execution" (Skills vs MCP). The phase also includes a comprehensive test suite and migrated all Gemini SDK usage to the new `google.genai` package.
 
 ---
 
@@ -125,5 +128,5 @@
 
 ---
 
-**Document Owner**: Guardrail.ai Governance Team
-**Next Review**: Phase 106 deployment
+**Document Owner**: Guardrail.ai Governance Team  
+**Next Review**: Phase 111 deployment

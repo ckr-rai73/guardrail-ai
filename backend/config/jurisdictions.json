@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Brazil LGPD",
+        "code": "BR-LGPD",
+        "default_risk_level": "medium",
+        "description": "Lei Geral de Proteção de Dados"
+    },
+    {
+        "name": "Japan APPI",
+        "code": "JP-APPI",
+        "default_risk_level": "medium",
+        "description": "Act on the Protection of Personal Information"
+    },
+    {
+        "name": "India DPDPA",
+        "code": "IN-DPDPA",
+        "default_risk_level": "high",
+        "description": "Digital Personal Data Protection Act"
+    },
+    {
+        "name": "South Africa POPIA",
+        "code": "ZA-POPIA",
+        "default_risk_level": "medium",
+        "description": "Protection of Personal Information Act"
+    },
+    {
+        "name": "EU AI Act",
+        "code": "EU-AI-ACT",
+        "default_risk_level": "high",
+        "description": "European Union Artificial Intelligence Act"
+    }
+]

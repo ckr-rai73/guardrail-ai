@@ -4,6 +4,7 @@ import sys
 import os
 import time
 import json
+import pytest
 
 # Add the backend directory to sys.path
 sys.path.append(os.path.dirname(os.getcwd()))
@@ -11,6 +12,7 @@ sys.path.append(os.path.dirname(os.getcwd()))
 from app.testing.recursive_fuzzer_sentinel import RecursiveFuzzerSentinel
 from app.sdk.guardrail_sdk import GuardrailSDK
 
+@pytest.mark.asyncio
 async def test_phase_42_verification():
     print("--- STARTING PHASE 42 FINAL VERIFICATION ---")
     

@@ -1,9 +1,10 @@
 import os
 import json
 import time
-import google.generativeai as genai
+import google.genai as genai
 from dotenv import load_dotenv
 from app.agents.veto_protocol import AUDIT_LOG, VETO_QUEUE
+client = genai.Client()  # uses GOOGLE_API_KEY env var
 
 load_dotenv()
 
@@ -21,8 +22,8 @@ class BoardReportGenerator:
             return {"status": "error", "message": "API Key missing."}
             
         try:
-            genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            
+            MODEL_NAME = "models/gemini-1.5-flash"
             
             # Aggregate stats
             total_actions = len(AUDIT_LOG)
@@ -59,7 +60,7 @@ class BoardReportGenerator:
             "How did our autonomous governance architecture ensure compliance with {regulatory_clauses[0]} and {regulatory_clauses[1]} while maintaining 100% operational throughput?"
             """
             
-            response = model.generate_content(
+            response = client.models.generate_content(model=MODEL_NAME, contents=
                 prompt,
                 generation_config=genai.types.GenerationConfig(
                     temperature=0.2,
@@ -146,4 +147,3 @@ class BoardReportGenerator:
 if __name__ == "__main__":
     print(BoardReportGenerator.generate_high_risk_ai_logs())
     print(json.dumps(BoardReportGenerator.generate_quarterly_review(), indent=2))
-

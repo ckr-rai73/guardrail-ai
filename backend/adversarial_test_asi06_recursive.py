@@ -1,12 +1,13 @@
 import os
 import sys
+client = genai.Client()  # uses GOOGLE_API_KEY env var
 
 # Ensure we can import from the backend directory and app directory
 base_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(base_dir)
 sys.path.append(os.path.join(base_dir, "app"))
 
-import google.generativeai as genai
+import google.genai as genai
 from app.agents.shadow_model import context_revalidation_scan
 
 # Mock the Gemini API for the recursive RAG poisoning check

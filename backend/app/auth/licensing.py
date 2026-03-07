@@ -9,6 +9,13 @@ class LicensingOracle:
     
     # In production, this would be a PQC-signed registry or a call to a distributed ledger.
     REGISTRY: Dict[str, Dict] = {
+        "GLOBAL_ROOT": {
+            "name": "Global Root Tenant",
+            "tier": "ROOT_OF_TRUST",
+            "features": ["PQC", "FORENSICS", "TRINITY", "GLOBAL_IMMUNITY"],
+            "expiry": 1893456000,  # 2030
+            "status": "ACTIVE"
+        },
         "TIER1-BANK-IND-01": {
             "name": "State Bank of India (Simulated)",
             "tier": "ROOT_OF_TRUST",

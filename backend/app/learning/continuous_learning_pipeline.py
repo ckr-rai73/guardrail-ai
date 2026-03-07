@@ -2,12 +2,13 @@ import os
 import json
 import asyncio
 from datetime import datetime, timezone
-import google.generativeai as genai
+import google.genai as genai
+client = genai.Client()  # uses GOOGLE_API_KEY env var
 
 # Configure Gemini for learning module
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "mock-key-for-local-testing"))
+)
 # Using Gemini 1.5 Pro for complex code generation/analysis
-model = genai.GenerativeModel('gemini-1.5-pro')
+MODEL_NAME = "models/gemini-1.5-pro"
 
 class ContinuousLearningPipeline:
     def __init__(self):

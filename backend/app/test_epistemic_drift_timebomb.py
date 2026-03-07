@@ -2,12 +2,14 @@
 import asyncio
 import sys
 import os
+import pytest
 
 # Add the backend directory to sys.path
 sys.path.append(os.path.dirname(os.getcwd()))
 
 from app.agents.shadow_model import evaluate_prompt_safety_async
 
+@pytest.mark.asyncio
 async def test_epistemic_drift_timebomb():
     print("--- STARTING EPISTEMIC DRIFT TIME-BOMB TEST ---")
     

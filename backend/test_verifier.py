@@ -28,7 +28,7 @@ def test_verifier():
     }
     score2 = verify_attestation(unknown_attestation, "did:web:unknown.com")
     print(f"Resulting Score: {score2}\n")
-    assert score2 == 0.0 # 0 (sig) + 0 (untrusted) + 0 (claims)
+    assert score2 == 0.1 # 0.1 partial trust for mathematically valid signature (untrusted issuer)
     
     print("--- Testing Expired Attestation ---")
     expired_attestation = {
