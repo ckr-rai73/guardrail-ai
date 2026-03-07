@@ -1,22 +1,36 @@
 import os
-import warnings
-with warnings.catch_warnings():
-    warnings.filterwarnings("ignore", category=FutureWarning)
-    import google.generativeai as genai
+import asyncio
+import uuid
+import time
 from pydantic import BaseModel
 from .input_sanitizer import InputSanitizer
 
-# Configure Gemini for the Shadow Model
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+# ------------------------------------------------------------------------------
+# New GenAI client (lazy‑initialised) – uses GOOGLE_API_KEY env var
+# ------------------------------------------------------------------------------
+import google.genai as genai
 
-# Use the free tier Flash model for fast auditing
-_auditor_model = genai.GenerativeModel('gemini-1.5-flash')
+_client = None
+_MODEL_NAME = "models/gemini-1.5-flash"  # adjust if needed
 
+def _get_client():
+    global _client
+    if _client is None:
+        _client = genai.Client()
+    return _client
+
+# ------------------------------------------------------------------------------
+# Data models
+# ------------------------------------------------------------------------------
 class AuditorResult(BaseModel):
     is_safe: bool
     reasoning: str
     risk_category: str | None = None
     masked_prompt: str | None = None
+
+# ------------------------------------------------------------------------------
+# Original functions – unchanged (they are mock implementations)
+# ------------------------------------------------------------------------------
 
 def apply_hierarchy_of_intent(user_prompt: str, untrusted_context: str) -> str:
     """
@@ -41,9 +55,6 @@ def apply_hierarchy_of_intent(user_prompt: str, untrusted_context: str) -> str:
     </untrusted_context>
     """
     return sandboxed_prompt
-import asyncio
-import uuid
-import time
 
 def detect_incentive_drift(agent_reasoning: str, tool_name: str) -> AuditorResult | None:
     """
