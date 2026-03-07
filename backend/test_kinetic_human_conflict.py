@@ -5,7 +5,7 @@ import time
 sys.path.append(os.path.join(os.getcwd(), 'backend/app'))
 
 # Mocking parts of the app to isolate the test
-from agents.veto_protocol import execute_tool, ActiveAgentState
+from app.agents.veto_protocol import execute_tool, ActiveAgentState
 from edge.kinetic_interlock import KineticSafetyInterlock
 
 def run_kinetic_human_conflict_test():

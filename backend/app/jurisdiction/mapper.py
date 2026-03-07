@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple
 from app.skills.loader import SkillLoader
 
 class RegulatoryMapper:
@@ -17,7 +17,7 @@ class RegulatoryMapper:
         """
         # Normalize jurisdiction code to skill filename
         skill_name = f"jurisdiction-{jurisdiction_code}"
-        
+
         try:
             skill = self.loader.load_skill(skill_name)
         except FileNotFoundError:
@@ -33,15 +33,10 @@ class RegulatoryMapper:
                 if control:
                     required_controls.append(control)
 
-        # Compute a compliance score based on context and risk level from skill
+        # Compute a compliance score (simplified for now)
         score = 1.0
-        # Optionally, you can parse additional metadata from the skill to adjust the score
-        # For example, if the skill has a "risk_level" in metadata:
-        # metadata = skill.get('metadata', {})
-        # if metadata.get('risk_level') == 'high':
-        #     score -= 0.2
 
-        # Deduplicate controls (though they should already be unique)
+        # Deduplicate controls
         required_controls = list(set(required_controls))
 
         return required_controls, max(0.0, score)
@@ -49,4 +44,11 @@ class RegulatoryMapper:
     def list_jurisdictions(self) -> List[str]:
         """Return all jurisdiction codes for which we have skill files."""
         skill_names = self.loader.list_skills()
-        return [name.replace("jurisdiction-", "") for name in skill_names if name.startswith("jurisdiction-")]
+        jurisdictions = []
+        for name in skill_names:
+            if name.startswith("jurisdiction-"):
+                code = name.replace("jurisdiction-", "", 1)
+                # Exclude non‑jurisdiction skills like "detection"
+                if code != "detection":
+                    jurisdictions.append(code)
+        return jurisdictions
