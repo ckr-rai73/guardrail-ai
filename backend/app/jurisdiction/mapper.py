@@ -1,63 +1,57 @@
-"""
-RegulatoryMapper - Phase 110
-Maps jurisdiction codes to required controls using skill files.
-"""
-
-import os
-import re
-from typing import Dict, List, Tuple, Any, Optional
-from app.skills.loader import SkillLoader
+from typing import List, Dict, Tuple
+from .loader import JurisdictionLoader
+from .models import JurisdictionRule
 
 class RegulatoryMapper:
     """
-    Loads jurisdiction-specific control requirements from skill files.
+    Maps agent actions against local jurisdiction rules.
+    Decides what Guardrail.ai controls are required and computes a compliance score.
     """
-
-    def __init__(self, skills_dir: str = "skills"):
-        self.loader = SkillLoader(skills_dir)
-        self.cache: Dict[str, Tuple[List[str], float]] = {}
-
-    def assess_action(self, jurisdiction_code: str, context: Dict[str, Any]) -> Tuple[List[str], float]:
+    def __init__(self, loader: JurisdictionLoader = None):
+        self.loader = loader or JurisdictionLoader()
+        
+    def assess_action(self, jurisdiction_code: str, action_context: Dict) -> Tuple[List[str], float]:
         """
-        Determine required controls and compliance score for an action in a given jurisdiction.
-
-        Args:
-            jurisdiction_code: e.g., "BR-LGPD", "EU-AI-ACT"
-            context: dictionary with action details (data_type, purpose, etc.)
-
-        Returns:
-            (list_of_required_controls, compliance_score)
+        Takes a jurisdiction code and action context.
+        Returns a tuple: (list of required control IDs, compliance score 0.0-1.0).
         """
-        # Normalize jurisdiction code (replace hyphens with underscores for skill filename)
-        skill_name = f"jurisdiction-{jurisdiction_code}"
-        try:
-            skill = self.loader.load_skill(skill_name)
-        except FileNotFoundError:
-            # If no specific skill, return empty controls and default score
+        rule: JurisdictionRule = self.loader.get_jurisdiction_rules(jurisdiction_code)
+        
+        if not rule or not rule.active:
+            # If no rules exist or they are inactive, we default to base Guardrail protections (score 1.0)
             return [], 1.0
-
-        # Extract required controls from the skill's "Required Controls" section
+            
         required_controls = []
-        if 'Required Controls' in skill['sections']:
-            # Each line is a bullet point like "- Phase 1 Veto Protocol"
-            for line in skill['sections']['Required Controls']:
-                # Remove leading dash and spaces
-                control = re.sub(r'^-\s*', '', line).strip()
-                if control:
-                    required_controls.append(control)
+        score = 1.0
+        
+        # Parse context
+        # Example context: {"data_type": "sensitive", "purpose": "marketing"}
+        data_type = action_context.get("data_type", "standard")
+        
+        # Very simple heuristic scoring for the mapper based on rule mappings
+        if data_type == "sensitive":
+            # If sensitive data, we ALWAYS need anonymization or explicit consent depending on the rules
+            # We look at the control mappings
+            mappings = rule.control_mappings
+            
+            # If the jurisdiction explicitly maps sensitive data anon, require it
+            if "sensitive_data_anonymization" in mappings:
+                required_controls.append(mappings["sensitive_data_anonymization"])
+                
+            # If it maps explicit consent require it
+            if "explicit_consent_required" in mappings:
+                required_controls.append(mappings["explicit_consent_required"])
+                
+            # If they are processing sensitive data in a high risk jurisdiction without proper controls modeled,
+            # drop the compliance score.
+            if rule.risk_level == "high":
+                score -= 0.2
+                
+            # If "data_subject_rights" mapped, add it
+            if "data_subject_rights" in mappings:
+                required_controls.append(mappings["data_subject_rights"])
 
-        # Compute a compliance score based on context and skill (simplified for now)
-        # You can enhance this later with more sophisticated logic
-        score = 1.0  # default full compliance if skill exists
-
-        return required_controls, score
-
-    def list_jurisdictions(self) -> List[str]:
-        """Return all jurisdiction codes for which we have skill files."""
-        skill_names = self.loader.list_skills()
-        # Extract jurisdiction codes from skill names (assuming format "jurisdiction-CODE")
-        codes = []
-        for name in skill_names:
-            if name.startswith("jurisdiction-") and name != "jurisdiction-detection":
-                codes.append(name.replace("jurisdiction-", "", 1))
-        return codes
+        # Deduplicate required controls
+        required_controls = list(set(required_controls))
+        
+        return required_controls, max(0.0, score)
