@@ -4,6 +4,9 @@ Phase 111 – Cloud Native Governance Plugins
 ============================================
 Abstract base class that every cloud-specific connector (AWS, Azure, GCP)
 must implement.  It owns the governance-assess → forward → bill lifecycle.
+
+The ``RealGovernanceClient`` replaces the earlier stub facade and calls
+the live Guardrail governance API over HTTP.
 """
 
 from __future__ import annotations
@@ -21,7 +24,7 @@ logger = logging.getLogger("guardrail.cloud")
 
 
 # ---------------------------------------------------------------------------
-# Minimal governance types (adaptable to the real GovernanceGateway later)
+# Governance types
 # ---------------------------------------------------------------------------
 
 @dataclass
@@ -32,47 +35,112 @@ class Decision:
     modifications: Dict[str, Any] = field(default_factory=dict)
 
 
-class GovernanceGateway:
-    """
-    Lightweight facade around the Phase-8 PolicyEngine and Phase-1 Veto
-    Protocol.  Cloud connectors call ``assess()``; internally this fans
-    out to policy evaluation, shadow-model verification, and constitution
-    checks exactly as the existing orchestration layer does.
+# ---------------------------------------------------------------------------
+# Real Governance Client (replaces the Phase 111 Step 1 stub)
+# ---------------------------------------------------------------------------
 
-    NOTE: In production this delegates to
-    ``app.orchestration.governance_gateway.GovernanceGatewayAPI`` and
-    ``app.mcp.policy_engine.PolicyEngine``.  The thin wrapper exists so
-    that cloud connectors never import heavy internal modules directly.
+class RealGovernanceClient:
     """
+    HTTP client that calls the live Guardrail governance API.
+
+    The connector sidecars use this to communicate with the core Guardrail
+    instance.  Each call hits::
+
+        POST {base_url}/api/v1/governance/assess
+
+    with the context dict as JSON.  The response is parsed into a
+    ``Decision`` object.
+
+    Parameters
+    ----------
+    base_url : str
+        Root URL of the Guardrail API (e.g. ``http://guardrail-core:8080``).
+    api_key : str
+        Shared secret transmitted via the ``X-API-Key`` header.
+    timeout : float
+        HTTP request timeout in seconds (default 10).
+    """
+
+    ASSESS_PATH = "/api/v1/governance/assess"
+
+    def __init__(
+        self,
+        base_url: str,
+        api_key: str,
+        *,
+        timeout: float = 10.0,
+    ) -> None:
+        self.base_url = base_url.rstrip("/")
+        self.api_key = api_key
+        self._client = httpx.AsyncClient(timeout=timeout)
+        logger.info(
+            "[GovernanceClient] Initialised – base_url=%s", self.base_url,
+        )
 
     async def assess(self, context: dict) -> Decision:
         """
-        Evaluate an incoming cloud-API request against Guardrail policies.
+        Send a governance assessment request and return the ``Decision``.
 
-        Parameters
-        ----------
-        context : dict
-            Must include at least ``method``, ``url``, ``service``, and
-            optionally ``body``, ``headers``, ``tenant_id``.
-
-        Returns
-        -------
-        Decision
-            One of ALLOW / BLOCK / MODIFY with an explanation and optional
-            modification payload.
+        Raises
+        ------
+        GovernanceAPIError
+            If the API returns a non-200 status, invalid JSON, or times out.
         """
-        # Phase 111 stub – always ALLOW until real wiring is done in Step 2.
-        # In the real implementation this calls:
-        #   PolicyEngine.evaluate(context)
-        #   ShadowModel.verify(context)
-        #   ConstitutionEngine.check(context)
-        logger.info(
-            "[GovernanceGateway] assess – service=%s method=%s url=%s",
-            context.get("service", "unknown"),
-            context.get("method", "?"),
-            context.get("url", "?"),
+        url = f"{self.base_url}{self.ASSESS_PATH}"
+        headers = {
+            "Content-Type": "application/json",
+            "X-API-Key": self.api_key,
+        }
+
+        try:
+            response = await self._client.post(
+                url, json=context, headers=headers,
+            )
+        except httpx.TimeoutException as exc:
+            raise GovernanceAPIError(
+                f"Governance API timed out: {exc}"
+            ) from exc
+        except httpx.HTTPError as exc:
+            raise GovernanceAPIError(
+                f"Governance API request failed: {exc}"
+            ) from exc
+
+        if response.status_code != 200:
+            raise GovernanceAPIError(
+                f"Governance API returned {response.status_code}: "
+                f"{response.text}"
+            )
+
+        try:
+            data = response.json()
+        except (json.JSONDecodeError, ValueError) as exc:
+            raise GovernanceAPIError(
+                f"Governance API returned invalid JSON: {exc}"
+            ) from exc
+
+        decision = Decision(
+            action=data.get("action", "BLOCK"),
+            reason=data.get("reason", ""),
+            modifications=data.get("modifications", {}),
         )
-        return Decision(action="ALLOW", reason="Default permit (Phase 111 stub)")
+
+        logger.info(
+            "[GovernanceClient] Decision received: %s – %s",
+            decision.action, decision.reason,
+        )
+        return decision
+
+    async def close(self) -> None:
+        """Shut down the internal HTTP client."""
+        await self._client.aclose()
+
+
+class GovernanceAPIError(Exception):
+    """Raised when the governance API call fails."""
+
+
+# Backward-compatible alias: connectors import ``GovernanceGateway``
+GovernanceGateway = RealGovernanceClient
 
 
 # ---------------------------------------------------------------------------
@@ -93,14 +161,23 @@ class CloudConnectorBase(ABC):
 
         extract_context  →  governance.assess  →  (modify?)  →  forward  →  bill
 
-    Subclasses (``AwsConnector``, ``AzureConnector``, ``GcpConnector``)
+    Subclasses (``AWSConnector``, ``AzureConnector``, ``GCPConnector``)
     implement the three abstract methods to handle vendor-specific
     serialisation, authentication, and forwarding.
+
+    Parameters
+    ----------
+    governance_gateway : RealGovernanceClient
+        HTTP client pointing at the live Guardrail governance API.
+    billing_adapter : CloudBillingAdapter
+        Marketplace metering adapter.
+    timeout : float
+        Timeout for upstream cloud requests (default 30s).
     """
 
     def __init__(
         self,
-        governance_gateway: GovernanceGateway,
+        governance_gateway: RealGovernanceClient,
         billing_adapter: CloudBillingAdapter,
         *,
         timeout: float = 30.0,
@@ -243,7 +320,7 @@ class CloudConnectorBase(ABC):
     ) -> dict:
         """
         Parse vendor-specific request details into a normalised context
-        dictionary suitable for ``GovernanceGateway.assess()``.
+        dictionary suitable for ``RealGovernanceClient.assess()``.
         """
         ...
 

@@ -19,7 +19,7 @@ import httpx
 import pytest
 import pytest_asyncio
 
-from app.cloud.cloud_connector_base import Decision, GovernanceGateway
+from app.cloud.cloud_connector_base import Decision, RealGovernanceClient
 from app.cloud.billing_adapter import CloudBillingAdapter
 from app.cloud.connector_azure import AzureConnector
 
@@ -30,8 +30,8 @@ from app.cloud.connector_azure import AzureConnector
 
 @pytest.fixture
 def mock_governance():
-    """GovernanceGateway with an async assess() that defaults to ALLOW."""
-    gw = MagicMock(spec=GovernanceGateway)
+    """RealGovernanceClient with a mocked async assess() that defaults to ALLOW."""
+    gw = MagicMock(spec=RealGovernanceClient)
     gw.assess = AsyncMock(
         return_value=Decision(action="ALLOW", reason="Test ALLOW"),
     )

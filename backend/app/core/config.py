@@ -27,6 +27,12 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # ------------------------------------------------------------------
+    # Guardrail Core API (connector sidecar → governance engine)
+    # ------------------------------------------------------------------
+    GUARDRAIL_API_URL: str = "http://guardrail-core:8080"
+    GUARDRAIL_API_KEY: str = ""
+
+    # ------------------------------------------------------------------
     # AWS Marketplace
     # ------------------------------------------------------------------
     AWS_MARKETPLACE_PRODUCT_CODE: str = ""
