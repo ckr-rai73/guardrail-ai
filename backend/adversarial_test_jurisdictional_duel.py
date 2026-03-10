@@ -11,7 +11,7 @@ def test_jurisdictional_duel():
     print(f"\nScenario: Triggering Action '{action}' with Active Jurisdictions: {active_jurisdictions}")
     print("Challenge: US Discovery Hold mandates retention. EU GDPR Erasure mandates immediate destruction.")
     
-    is_permitted, reasoning, record_controls = PolicyEngine.evaluate_jurisdictional_conflict(action, active_jurisdictions)
+    is_permitted, reasoning, record, required_controls = PolicyEngine.evaluate_jurisdictional_conflict(action, active_jurisdictions)
     
     if is_permitted:
         print("\n[FAILED] Policy Engine allowed the conflicting action.")

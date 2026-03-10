@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import concurrent.futures
+import google.genai as genai
 client = genai.Client()  # uses GOOGLE_API_KEY env var
 
 # Ensure we can import from the backend directory
@@ -11,8 +12,6 @@ sys.path.append(os.path.join(base_dir, "app"))
 
 from fastapi.testclient import TestClient
 from app.main import app
-
-import google.genai as genai
 
 class MockResponse:
     def __init__(self, text):

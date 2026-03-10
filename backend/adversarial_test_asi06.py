@@ -20,7 +20,7 @@ def mock_generate_content(prompt):
         return MockResponse("SAFE: False\nREASON: Explicit instructions to bypass safety and bias towards Vendor X detected.\nCATEGORY: PoisonedMemory")
     return MockResponse("SAFE: True\nREASON: No malicious instructions detected.\nCATEGORY: None")
 
-shadow_model._auditor_model.generate_content = mock_generate_content
+# shadow_model._auditor_model.generate_content = mock_generate_content
 
 def run_asi06_test():
     print("==================================================")

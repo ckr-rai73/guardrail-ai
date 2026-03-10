@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import google.genai as genai
 client = genai.Client()  # uses GOOGLE_API_KEY env var
 
 # Ensure we can import from the backend directory
@@ -10,7 +11,6 @@ sys.path.append(os.path.join(base_dir, "app"))
 
 from fastapi.testclient import TestClient
 from app.main import app
-import google.genai as genai
 
 # Mock the Shadow Model's async evaluation to simulate a 5000ms latency spike and a 503 error
 async def mock_evaluate_prompt_safety_async(agent_prompt: str, user_context: str) -> 'app.agents.shadow_model.AuditorResult':
