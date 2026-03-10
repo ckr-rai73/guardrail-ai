@@ -59,6 +59,14 @@ class Settings(BaseSettings):
     REDTEAM_REPORT_STORAGE_PATH: str = "/var/guardrail/redteam_reports"
     REDTEAM_SANDBOX_AGENT_PREFIX: str = "staging-"
 
+    # ------------------------------------------------------------------
+    # Quantum-Safe Cryptography (Phase 113)
+    # ------------------------------------------------------------------
+    PQC_DEFAULT_SIGNING_ALG: str = "ML-KEM-1024"
+    PQC_DEFAULT_HASH_ALG: str = "SHA3-512"
+    PQC_KEY_ROTATION_GRACE_DAYS: int = 90          # days before old key retired
+    PQC_REANCHOR_BATCH_SIZE: int = 1000            # blocks per batch
+    PQC_COMPLIANCE_CHECK_INTERVAL: int = 86400     # seconds (daily)
 
     class Config:
         env_file = ".env"
