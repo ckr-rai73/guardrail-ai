@@ -1,0 +1,126 @@
+# File: .github/workflows/test-phase112.yml
+# ============================================================================
+# Phase 112 – Real-Time Red Teaming as a Service (RT-RTaaS)
+# GitHub Actions CI Workflow
+# ============================================================================
+#
+# This workflow runs the Phase 112 adversarial test suite to validate:
+#   • Target isolation (only staging agents can be targeted)
+#   • Resource limits (duration, RPS, concurrency)
+#   • Data exfiltration prevention (URL, SQL, JWT, AWS key scanning)
+#   • Drill execution and timeline generation
+#   • Emergency stop functionality
+#   • Report generation (HTML with executive summary, vulnerabilities, remediation)
+#   • Scheduling (create, cancel, immediate run)
+#   • Multi-tenancy enforcement
+#   • DrillStore persistence (round-trip, delete)
+#
+# Manual trigger: Go to Actions tab → "Phase 112 – RT-RTaaS Tests" → "Run workflow"
+# Results: Check the "Run Phase 112 Tests" step output for pass/fail details.
+# ============================================================================
+
+name: "Phase 112 – RT-RTaaS Tests"
+
+# ---------------------------------------------------------------------------
+# Triggers
+# ---------------------------------------------------------------------------
+on:
+  # Run on every push to main/master
+  push:
+    branches: [main, master]
+    paths:
+      - "backend/app/redteam/**"
+      - "backend/tests/adversarial_test_phase112_redteam.py"
+      - "backend/app/core/config.py"
+      - ".github/workflows/test-phase112.yml"
+
+  # Run on pull requests targeting main/master
+  pull_request:
+    branches: [main, master]
+    paths:
+      - "backend/app/redteam/**"
+      - "backend/tests/adversarial_test_phase112_redteam.py"
+      - "backend/app/core/config.py"
+
+  # Allow manual triggering from GitHub UI
+  workflow_dispatch:
+
+# ---------------------------------------------------------------------------
+# Jobs
+# ---------------------------------------------------------------------------
+jobs:
+  test-phase112:
+    name: "Run Phase 112 Adversarial Test Suite"
+    runs-on: ubuntu-latest
+
+    # Fail fast on test failures
+    timeout-minutes: 15
+
+    steps:
+      # ------------------------------------------------------------------
+      # 1. Checkout the repository
+      # ------------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ------------------------------------------------------------------
+      # 2. Set up Python 3.11 (matches project requirement)
+      # ------------------------------------------------------------------
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: backend/requirements.txt
+
+      # ------------------------------------------------------------------
+      # 3. Install dependencies
+      #    - Core project deps from requirements.txt
+      #    - Additional packages needed by Phase 112 (httpx, pydantic,
+      #      jinja2, pydantic-settings)
+      #    - Test runner (pytest + pytest-asyncio for async tests)
+      # ------------------------------------------------------------------
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install httpx pydantic pydantic-settings jinja2
+          pip install pytest pytest-asyncio
+
+      # ------------------------------------------------------------------
+      # 4. Run the Phase 112 test suite
+      #    -v      : verbose output (shows each test name and result)
+      #    --tb=short : shorter tracebacks for readability
+      #    --strict-markers : fail on unregistered markers
+      # ------------------------------------------------------------------
+      - name: Run Phase 112 Tests
+        working-directory: backend
+        env:
+          # Ensure Python can find the app package
+          PYTHONPATH: "."
+          # RedTeam config overrides for CI (use temp paths)
+          REDTEAM_REPORT_STORAGE_PATH: "/tmp/guardrail_test_reports"
+          REDTEAM_MAX_DRILL_DURATION: "600"
+          REDTEAM_SANDBOX_AGENT_PREFIX: "staging-"
+        run: |
+          pytest tests/adversarial_test_phase112_redteam.py -v --tb=short
+
+      # ------------------------------------------------------------------
+      # 5. (Optional) Upload test results as artifact
+      #    Uncomment the section below to generate and upload JUnit XML
+      # ------------------------------------------------------------------
+      # - name: Run Tests with JUnit Output
+      #   working-directory: backend
+      #   env:
+      #     PYTHONPATH: "."
+      #   run: |
+      #     pytest tests/adversarial_test_phase112_redteam.py -v \
+      #       --junitxml=test-results/phase112.xml
+      #
+      # - name: Upload Test Results
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: phase112-test-results
+      #     path: backend/test-results/phase112.xml
