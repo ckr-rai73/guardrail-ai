@@ -1,6 +1,6 @@
-# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–112)
+# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–113)
 
-**Last Updated**: 2026-03-10 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 112/112
+**Last Updated**: 2026-03-11 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 113/113
 
 ---
 
@@ -117,6 +117,14 @@
 
 ---
 
+## 🔐 Quantum-Safe Infrastructure (Phase 113): Post-Quantum Upgrade
+
+| Phase | Capability | Key Modules | Verification |
+|:---:|:---|:---|:---|
+| 113 | **Quantum-Safe Upgrade** — PQC key rotation with dual-signature mode (ML-KEM-1024, ML-DSA-65, SPHINCS+-SHA2-256f), Merkle ledger re-anchoring (SHA3-512), continuous crypto compliance checker | `pqc_rotator.py`, `ledger_re_anchor_orchestrator.py`, `crypto_compliance_checker.py` | `adversarial_test_phase113_quantum.py` (40+ tests: forgery resistance, key lifecycle, re-anchoring, compliance, 10k-block perf) |
+
+---
+
 ## Cross-Cutting Implementation Verification
 
 | Guideline | Status |
@@ -143,4 +151,4 @@
 ---
 
 **Document Owner**: Guardrail.ai Governance Team  
-**Next Review**: Phase 113 deployment
+**Next Review**: Phase 114 deployment

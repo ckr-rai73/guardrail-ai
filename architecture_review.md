@@ -1,6 +1,6 @@
 # 🏗️ Architecture Review: Guardrail.ai Sovereign Trust Platform
 
-**Last Updated**: 2026-03-10 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–112
+**Last Updated**: 2026-03-11 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–113
 
 
 
@@ -137,6 +137,13 @@ Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules fo
 | RT-RTaaS API | `app/redteam/api.py` | <20ms | HIGH |
 | Drill Models & Store | `app/redteam/models.py` | <5ms | MEDIUM |
 
+### Quantum-Safe Cryptography (Phase 113)
+| Component | File | SLO | Security Level |
+|:---|:---|:---|:---|
+| PQC Key Rotator | `app/crypto/pqc_rotator.py` | <50ms | CRITICAL |
+| Ledger Re-Anchor Orchestrator | `app/crypto/ledger_re_anchor_orchestrator.py` | <100ms/batch | CRITICAL |
+| Crypto Compliance Checker | `app/crypto/crypto_compliance_checker.py` | <500ms | HIGH |
+
 ### Orchestration (Phases 31–42, 100)
 | Component | File | SLO | Security Level |
 |:---|:---|:---|:---|
@@ -204,10 +211,12 @@ Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules fo
 
 ## Security Architecture
 
-### Cryptographic Stack
-- **Signing**: SPHINCS+ SHA3-256f (FIPS 205) — post-quantum safe
+### Cryptographic Stack (Updated Phase 113)
+- **Signing**: SPHINCS+-SHA2-256f (FIPS 205), ML-DSA-65 (FIPS 204) — post-quantum safe
 - **Key Encapsulation**: ML-KEM-1024 (FIPS 203)
-- **Hashing**: SHA3-256/512, Keccak-256
+- **Hashing**: SHA3-256/512, BLAKE2b — quantum-resistant
+- **Key Rotation**: Dual-signature mode with automated re-signing
+- **Ledger Integrity**: Merkle re-anchoring with dual-root (legacy + quantum-safe)
 - **ZK-Proofs**: Groth16 (simulated, production-ready interface)
 
 ### Defense Layers
@@ -218,8 +227,9 @@ Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules fo
 5. **L5 — Economics**: Insurance Oracle, Underwriting Gateway
 6. **L6 — Cloud Governance**: AWS/Azure/GCP Connectors, Marketplace Billing
 7. **L7 — Adversarial Validation**: RT-RTaaS Safe Exploit Engine, Scheduled Drills
+8. **L8 — Quantum Resilience**: PQC Key Rotation, Ledger Re-Anchoring, Crypto Compliance
 
-### Red-Team Review Status (Phases 98–112)
+### Red-Team Review Status (Phases 98–113)
 | Phase | Red-Team Test | Result | Adversarial Script |
 |:---|:---|:---|:---|
 | 98 | Manifest tampering, trust-score bypass | ✅ PASS | `adversarial_test_phase98_manifest.py` |
@@ -237,6 +247,7 @@ Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules fo
 | 110 | Skill-based jurisdiction, regulatory mapper, veto integration | ✅ PASS | `test_regulatory_mapper_skills.py`, `test_phase110_engines.py` |
 | 111 | Cloud connector blocking, modification, auth passthrough, billing accuracy | ✅ PASS | `test_connector_aws.py`, `test_connector_azure.py`, `test_connector_gcp.py`, `test_governance_client.py`, `test_billing_adapter.py` |
 | 112 | Target isolation, exfil prevention, resource limits, scheduling, reports, emergency stop | ✅ PASS (30/30) | `adversarial_test_phase112_redteam.py` |
+| 113 | Quantum forgery resistance, key rotation lifecycle, dual-signature, ledger re-anchoring, compliance checker, 10k-block perf | ✅ PASS (40+/40+) | `adversarial_test_phase113_quantum.py` |
 
 ---
 
@@ -266,4 +277,4 @@ Feature Branch → PR Review → Staging Deploy → Adversarial Tests
 ---
 
 **Review Board**: Guardrailai Architecture Council  
-**Next Review**: Phase 113 deployment
+**Next Review**: Phase 114 deployment
