@@ -1,6 +1,6 @@
 # 🏗️ Architecture Review: Guardrail.ai Sovereign Trust Platform
 
-**Last Updated**: 2026-03-07 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–110
+**Last Updated**: 2026-03-10 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–112
 
 
 
@@ -57,12 +57,12 @@ The system now incorporates a skill‑based knowledge layer for jurisdiction rul
 │ jurisdiction-detection.md │ jurisdiction-BR-LGPD.md │ ... │
 └────────────────────────────┬────────────────────────────────┘
 │ loaded by
-▼
+                            ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ SkillLoader (Phase 110) │
 └────────────────────────────┬────────────────────────────────┘
 │ provides rules to
-▼
+                            ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ RegulatoryMapper (Phase 110) │
 └────────────────────────────┬────────────────────────────────┘
@@ -74,7 +74,29 @@ The system now incorporates a skill‑based knowledge layer for jurisdiction rul
 │ • evaluate_with_veto() │
 └─────────────────────────────────────────────────────────────┘```
 
----
+### Cloud Native Integration (Phase 111)
+The platform now includes a family of cloud connectors that run as sidecar proxies, intercepting calls to AWS, Azure, and GCP AI services:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   CLOUD SIDECAR PROXY                       │
+│  ┌─────────────┐  ┌──────────────┐  ┌─────────────┐       │
+│  │AWSConnector │  │AzureConnector│  │ GCPConnector │       │
+│  │  (SigV4)    │  │ (passthrough)│  │ (passthrough)│       │
+│  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘       │
+│         └────────────────┼─────────────────┘               │
+│                          ▼                                  │
+│              ┌─────────────────────┐                        │
+│              │RealGovernanceClient │──→ Guardrail Core API  │
+│              └──────────┬──────────┘                        │
+│                         ▼                                   │
+│              ┌─────────────────────┐                        │
+│              │ CloudBillingAdapter │──→ Marketplace APIs    │
+│              └─────────────────────┘                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules for AWS ECS Fargate, Azure Container Instances, and GCP Cloud Run.
 
 ---
 
@@ -94,6 +116,26 @@ The system now incorporates a skill‑based knowledge layer for jurisdiction rul
 | **SkillLoader (Phase 110)** | `app/skills/loader.py` | <10ms | MEDIUM |
 | **RegulatoryMapper (updated) (Phase 110)** | `app/jurisdiction/mapper.py` | <20ms | HIGH |
 | **Jurisdiction Skill Files (Phase 110)** | `skills/jurisdiction-*.md` | n/a | MEDIUM |
+
+### Cloud Connectors (Phase 111)
+| Component | File | SLO | Security Level |
+|:---|:---|:---|:---|
+| Cloud Connector Base | `app/cloud/cloud_connector_base.py` | n/a | HIGH |
+| AWS Connector (SigV4) | `app/cloud/connector_aws.py` | <100ms | HIGH |
+| Azure Connector | `app/cloud/connector_azure.py` | <100ms | HIGH |
+| GCP Connector | `app/cloud/connector_gcp.py` | <100ms | HIGH |
+| Real Governance Client | `app/cloud/cloud_connector_base.py` | <50ms | CRITICAL |
+| Cloud Billing Adapter | `app/cloud/billing_adapter.py` | <200ms | MEDIUM |
+| Proxy Server | `app/cloud/proxy_server.py` | <5ms overhead | HIGH |
+
+### Red-Team as a Service (Phase 112)
+| Component | File | SLO | Security Level |
+|:---|:---|:---|:---|
+| Safe Exploit Engine | `app/redteam/safe_exploit_engine.py` | <100ms | CRITICAL |
+| Red-Team Scheduler | `app/redteam/scheduler.py` | <10ms | HIGH |
+| Report Generator | `app/redteam/report_generator.py` | <500ms | MEDIUM |
+| RT-RTaaS API | `app/redteam/api.py` | <20ms | HIGH |
+| Drill Models & Store | `app/redteam/models.py` | <5ms | MEDIUM |
 
 ### Orchestration (Phases 31–42, 100)
 | Component | File | SLO | Security Level |
@@ -147,6 +189,16 @@ The system now incorporates a skill‑based knowledge layer for jurisdiction rul
 | `/api/v1/adversarial/stats` | GET | 102 | Internal | 100/min |
 | `/api/v1/compliance/ingest` | POST | 103 | Internal | 10/min |
 | `/api/v1/compliance/rollback` | POST | 103 | PQC-Signed | 5/min |
+| `/healthz` (proxy) | GET | 111 | None | Unlimited |
+| `/{path:path}` (proxy catch-all) | ANY | 111 | Passthrough | 10000/min |
+| `/api/v1/governance/assess` (used by proxy) | POST | 111 | X-API-Key | 5000/min |
+| `/api/v1/redteam/drills` | POST | 112 | API Key | 10/min |
+| `/api/v1/redteam/drills/{id}` | GET | 112 | API Key | 100/min |
+| `/api/v1/redteam/drills/{id}/report` | GET | 112 | API Key | 50/min |
+| `/api/v1/redteam/drills/{id}/stop` | POST | 112 | API Key | 10/min |
+| `/api/v1/redteam/schedules` | POST | 112 | API Key | 10/min |
+| `/api/v1/redteam/schedules` | GET | 112 | API Key | 100/min |
+| `/api/v1/redteam/schedules/{id}` | DELETE | 112 | API Key | 10/min |
 
 ---
 
@@ -164,8 +216,10 @@ The system now incorporates a skill‑based knowledge layer for jurisdiction rul
 3. **L3 — Intelligence**: Signal Aggregator, Toxic Combination Correlator
 4. **L4 — Forensics**: Judicial Exporter, Fault Tree, Legal Wrapper
 5. **L5 — Economics**: Insurance Oracle, Underwriting Gateway
+6. **L6 — Cloud Governance**: AWS/Azure/GCP Connectors, Marketplace Billing
+7. **L7 — Adversarial Validation**: RT-RTaaS Safe Exploit Engine, Scheduled Drills
 
-### Red-Team Review Status (Phases 98–110)
+### Red-Team Review Status (Phases 98–112)
 | Phase | Red-Team Test | Result | Adversarial Script |
 |:---|:---|:---|:---|
 | 98 | Manifest tampering, trust-score bypass | ✅ PASS | `adversarial_test_phase98_manifest.py` |
@@ -181,6 +235,8 @@ The system now incorporates a skill‑based knowledge layer for jurisdiction rul
 | 108 | Continuous learning pipeline, autonomous rule proposals | ✅ PASS | `adversarial_test_phase108_learning.py` |
 | 109 | External interoperability, remote attestation | ✅ PASS | `adversarial_test_phase109_interop.py` |
 | 110 | Skill-based jurisdiction, regulatory mapper, veto integration | ✅ PASS | `test_regulatory_mapper_skills.py`, `test_phase110_engines.py` |
+| 111 | Cloud connector blocking, modification, auth passthrough, billing accuracy | ✅ PASS | `test_connector_aws.py`, `test_connector_azure.py`, `test_connector_gcp.py`, `test_governance_client.py`, `test_billing_adapter.py` |
+| 112 | Target isolation, exfil prevention, resource limits, scheduling, reports, emergency stop | ✅ PASS (30/30) | `adversarial_test_phase112_redteam.py` |
 
 ---
 
@@ -198,6 +254,16 @@ Feature Branch → PR Review → Staging Deploy → Adversarial Tests
 | Canary | P99 + Error Rate delta | P99 ≤ 150ms, error delta ≤ 2% |
 | Production | Full rollout | Canary decision = PROMOTE |
 
+### Cloud Connector Deployment (Phase 111)
+| Platform | Method | Infrastructure |
+|:---|:---|:---|
+| Kubernetes | Helm chart (`deploy/charts/guardrail-cloud-connector/`) | Deployment + Service + Secrets |
+| AWS | Terraform (`deploy/terraform/modules/aws-ecs/`) | ECS Fargate + IAM + CloudWatch |
+| Azure | Terraform (`deploy/terraform/modules/azure-aci/`) | Container Instances + probes |
+| GCP | Terraform (`deploy/terraform/modules/gcp-cloud-run/`) | Cloud Run v2 + autoscaling |
+| Docker | `backend/Dockerfile` | python:3.11-slim + uvicorn |
+
 ---
 
-**Review Board**: Guardrailai Architecture Council
+**Review Board**: Guardrailai Architecture Council  
+**Next Review**: Phase 113 deployment

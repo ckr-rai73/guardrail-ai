@@ -1,6 +1,6 @@
-# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–110)
+# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–112)
 
-**Last Updated**: 2026-03-07 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 110/110
+**Last Updated**: 2026-03-10 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 112/112
 
 ---
 
@@ -21,7 +21,7 @@
 
 ---
 
-## 🔒 Adversarial Hardening (Phases 11–25): Attack Resilience
+## 🔥 Adversarial Hardening (Phases 11–25): Attack Resilience
 
 | Phase | Capability | Threat Addressed |
 |:---:|:---|:---|
@@ -95,11 +95,25 @@
 | 105 | **Forensic Similarity Retrieval** — RAG vector index for incident e-discovery | `forensic_replay.py` | `adversarial_test_phase105_similarity.py` |
 | 106 | **Autonomous Chaos Engineering** — self-generating swarm scenarios & canary injection | `chaos_orchestrator.py` | `adversarial_test_phase106_chaos.py` |
 | 107 | **Real-Time LLM Evaluation Dashboard** — C-suite visibility & board reporting | `llm_evaluation.py`, `board_report.py`, `HeatmapScreen.dart` | `Manual Verification` |
-| 108 | **Unified Integration & Continuous Learning** — autonomous 5-of-5 Trinity rule proposals | `continuous_learning_pipeline.py`, `shadow_amendment.py` | `adversarial_test_phase108_learning.py` |
+| 108 | **Continuous Learning Pipeline** — autonomous 5-of-5 Trinity rule proposals | `continuous_learning_pipeline.py`, `shadow_amendment.py` | `adversarial_test_phase108_learning.py` |
 | 109 | **External Interoperability** — remote attestation & zero-knowledge trust handshakes | `interop_handshake.py`, `foreign_agent_adapter.py` | `adversarial_test_phase109_interop.py` |
-| 110 | **Multi-Jurisdiction Expansion Pack** — skill-based jurisdiction detection, regulatory mapper with required controls, veto integration | `jurisdiction-detection.md`, `SkillLoader`, `RegulatoryMapper`, `policy_engine.py` | `test_regulatory_mapper_skills.py`, `test_phase110_engines.py`, all tests pass |
+| 110 | **Multi-Jurisdiction Expansion Pack** — skill-based jurisdiction detection, regulatory mapper with required controls, veto integration | `jurisdiction-detection.md`, `SkillLoader`, `RegulatoryMapper`, `policy_engine.py` | `test_regulatory_mapper_skills.py`, `test_phase110_engines.py` |
 
-**Phase 110 (Multi‑Jurisdiction Expansion Pack)** introduced a fully externalized, skill‑based jurisdiction system. Instead of hardcoding mapping rules and control requirements in Python, all jurisdiction knowledge now lives in version‑controlled Markdown files under `skills/`. The `SkillLoader` parses these files, and `RegulatoryMapper` provides required controls based on jurisdiction code. The `PolicyEngine` uses this to detect applicable jurisdictions from context (user location, data residency) and trigger a veto if mandatory controls are missing. This token‑saving architecture aligns with the industry shift toward separating "knowledge" from "execution" (Skills vs MCP). The phase also includes a comprehensive test suite and migrated all Gemini SDK usage to the new `google.genai` package.
+---
+
+## ☁️ Cloud Native Integration (Phase 111): Embedded Trust Layer
+
+| Phase | Capability | Key Modules | Verification |
+|:---:|:---|:---|:---|
+| 111 | **Cloud Native Governance Plugins** — transparent proxies for AWS, Azure, GCP AI services; enforce Guardrail policies without code changes; marketplace metering | `cloud_connector_aws.py`, `cloud_connector_azure.py`, `cloud_connector_gcp.py`, `proxy_server.py`, `billing_adapter.py`, `RealGovernanceClient` | `adversarial_test_phase111_cloud.py` (blocking, modification, load, billing accuracy) |
+
+---
+
+## 🔴 Commercial Services (Phase 112): Red-Team as a Service
+
+| Phase | Capability | Key Modules | Verification |
+|:---:|:---|:---|:---|
+| 112 | **Real-Time Red Teaming as a Service (RT-RTaaS)** — scheduled & on-demand adversarial drills with safety isolation, executive HTML reports, emergency stop, multi-tenancy | `scheduler.py`, `safe_exploit_engine.py`, `report_generator.py`, `api.py`, `models.py` | `adversarial_test_phase112_redteam.py` (30 tests: isolation, exfil prevention, scheduling, reports, stop) |
 
 ---
 
@@ -129,4 +143,4 @@
 ---
 
 **Document Owner**: Guardrail.ai Governance Team  
-**Next Review**: Phase 111 deployment
+**Next Review**: Phase 113 deployment

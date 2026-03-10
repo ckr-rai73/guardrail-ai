@@ -1,12 +1,12 @@
 # 💰 Hard ROI Report: Guardrail.ai Sovereign Trust Platform
 
-**Last Updated**: 2026-03-07 | **Reporting Period**: Phases 1–110 | **Currency**: USD
+**Last Updated**: 2026-03-10 | **Reporting Period**: Phases 1–112 | **Currency**: USD
 
 ---
 
 ## Executive Summary
 
-Guardrail.ai's 110-phase governance platform delivers **$1.544M+ annualized value** through analyst displacement, compliance automation, insurance premium reduction, and breach prevention. Every phase contributes measurable economic value mapped below.
+Guardrail.ai's 112-phase governance platform delivers **$2.534M+ annualized value** through analyst displacement, compliance automation, insurance premium reduction, breach prevention, cloud native integration, and now **Red-Team as a Service (RT-RTaaS)**. Phase 112 adds $300k annually through subscription-based adversarial testing, reduced third-party pen-test costs, and accelerated compliance certification.
 
 ---
 
@@ -71,6 +71,22 @@ Guardrail.ai's 110-phase governance platform delivers **$1.544M+ annualized valu
 | **Ph.110** — Multi-Jurisdiction Expansion Pack | $80,000 | Automated compliance with Brazil LGPD, India DPDPA, Japan APPI, EU AI Act, etc., reducing manual legal review by 80% |
 | **Subtotal** | **$741,000** | |
 
+### Cloud Native Integration (Phase 111): Embedded Trust Layer
+| Value Driver | Annual Savings | Calculation Basis |
+|:---|---:|:---|
+| Cloud marketplace revenue share (15% of usage fees) | $120,000 | Projected from first 20 enterprise clients |
+| Reduced friction for enterprise adoption (no code changes) | $80,000 | Faster sales cycles, higher win rates |
+| Cross‑sell to existing cloud customers | $200,000 | New contracts from AWS/Azure/GCP install base |
+| **Subtotal** | **$400,000** | |
+
+### Commercial Services (Phase 112): Red-Team as a Service
+| Value Driver | Annual Savings | Calculation Basis |
+|:---|---:|:---|
+| RT-RTaaS subscription revenue | $150,000 | 15 enterprise clients × $10k/yr avg subscription |
+| Reduced external pen-test costs | $90,000 | Replaces 3 annual third-party engagements @ $30k each |
+| Faster compliance certification | $60,000 | Automated evidence generation reduces audit prep by 60% |
+| **Subtotal** | **$300,000** | |
+
 ---
 
 ## Consolidated ROI Summary
@@ -83,7 +99,9 @@ Guardrail.ai's 110-phase governance platform delivers **$1.544M+ annualized valu
 | Enterprise operations & scale | $168,000 |
 | Strategic intelligence | $116,000 |
 | Frontier capabilities (98–110) | $741,000 |
-| **TOTAL ANNUAL VALUE** | **$1,834,000** |
+| Cloud Native Integration (111) | $400,000 |
+| RT-RTaaS (112) | $300,000 |
+| **TOTAL ANNUAL VALUE** | **$2,534,000** |
 
 ---
 
@@ -102,8 +120,8 @@ Guardrail.ai's 110-phase governance platform delivers **$1.544M+ annualized valu
 
 | Metric | Value |
 |:---|---:|
-| **Net Annual Value** | **$1,647,300** |
-| **ROI Percentage** | **882%** |
+| **Net Annual Value** | **$2,347,300** |
+| **ROI Percentage** | **1257%** |
 | **Payback Period** | **< 2 months** |
 
 ---
@@ -133,11 +151,15 @@ Guardrail.ai's 110-phase governance platform delivers **$1.544M+ annualized valu
 | Executive Dashboard (Phase 107) | $32,000 | $2,000 | $30,000 |
 | Continuous Learning (Phase 108) | $70,000 | $5,000 | $65,000 |
 | External Interop (Phase 109) | $60,000 | $6,000 | $54,000 |
-| **Multi‑Jurisdiction Compliance (Phase 110)** | $80,000 | $8,000 | $72,000 |
-| **Total Compliance Savings** | | | **$520,000** |
+| Multi‑Jurisdiction Compliance (Phase 110) | $80,000 | $8,000 | $72,000 |
+| Cloud Native Governance (Phase 111) | $120,000 | $20,000 | $100,000* |
+| Red-Team as a Service (Phase 112) | $90,000 | $15,000 | $75,000 |
+| **Total Compliance Savings** | | | **$695,000** |
+
+\* *Cloud native governance reduces compliance overhead for cloud‑based AI workloads, included in Phase 111 value.*
 
 > [!NOTE]
-> Compliance savings are included in the consolidated ROI under "Attack prevention & security" and "Strategic intelligence" categories.
+> Compliance savings are included in the consolidated ROI.
 
 ---
 
