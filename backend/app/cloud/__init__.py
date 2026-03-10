@@ -9,5 +9,6 @@ with unified governance assessment and billing metering.
 from app.cloud.cloud_connector_base import CloudConnectorBase
 from app.cloud.billing_adapter import CloudBillingAdapter
 from app.cloud.connector_aws import AWSConnector
+from app.cloud.connector_azure import AzureConnector
 
-__all__ = ["CloudConnectorBase", "CloudBillingAdapter", "AWSConnector"]
+__all__ = ["CloudConnectorBase", "CloudBillingAdapter", "AWSConnector", "AzureConnector"]
