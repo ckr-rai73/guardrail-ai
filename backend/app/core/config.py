@@ -51,6 +51,15 @@ class Settings(BaseSettings):
     GCP_SERVICE_ACCOUNT_JSON: str = ""         # raw JSON string of service-account key
     GCP_SERVICE_NAME: str = ""                 # GCP Service Control API service name
 
+    # ------------------------------------------------------------------
+    # Red-Team as a Service (Phase 112)
+    # ------------------------------------------------------------------
+    REDTEAM_MAX_DRILL_DURATION: int = 3600           # seconds
+    REDTEAM_MAX_CONCURRENT_DRILLS_PER_CLIENT: int = 2
+    REDTEAM_REPORT_STORAGE_PATH: str = "/var/guardrail/redteam_reports"
+    REDTEAM_SANDBOX_AGENT_PREFIX: str = "staging-"
+
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
