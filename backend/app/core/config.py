@@ -41,13 +41,15 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
     # Azure Marketplace
     # ------------------------------------------------------------------
-    AZURE_MARKETPLACE_ACCESS_TOKEN: str = ""
+    AZURE_MARKETPLACE_ACCESS_TOKEN: str = ""   # fallback if DefaultAzureCredential unavailable
     AZURE_RESOURCE_ID: str = ""
 
     # ------------------------------------------------------------------
     # GCP Marketplace
     # ------------------------------------------------------------------
-    GCP_MARKETPLACE_CREDENTIALS: str = ""
+    GCP_MARKETPLACE_CREDENTIALS: str = ""      # deprecated, use GCP_SERVICE_ACCOUNT_JSON
+    GCP_SERVICE_ACCOUNT_JSON: str = ""         # raw JSON string of service-account key
+    GCP_SERVICE_NAME: str = ""                 # GCP Service Control API service name
 
     class Config:
         env_file = ".env"
