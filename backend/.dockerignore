@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# Tests
+tests/
+backend/tests/
+
+# Documentation
+*.md
+docs/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+.env.*
+venv/
+.venv/
+
+# Docker
+Dockerfile
+docker-compose*.yml
+
+# Terraform
+deploy/terraform/
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log

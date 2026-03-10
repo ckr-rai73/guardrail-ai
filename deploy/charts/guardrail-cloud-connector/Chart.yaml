@@ -1,0 +1,15 @@
+apiVersion: v2
+name: guardrail-cloud-connector
+description: Guardrail.ai Cloud Governance Proxy – transparent sidecar for AWS, Azure, GCP AI services
+type: application
+version: 1.0.0
+appVersion: "111.0.0"
+keywords:
+  - guardrail
+  - governance
+  - ai-safety
+  - cloud-connector
+  - sidecar-proxy
+maintainers:
+  - name: Guardrail.ai
+    email: ops@guardrail.ai

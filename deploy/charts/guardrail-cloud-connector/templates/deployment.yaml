@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "guardrail-cloud-connector.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "guardrail-cloud-connector.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "guardrail-cloud-connector.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "guardrail-cloud-connector.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - name: connector
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          env:
+            # Core settings
+            - name: CLOUD_PROVIDER
+              value: {{ .Values.cloudProvider | quote }}
+            - name: GUARDRAIL_API_URL
+              value: {{ .Values.guardrail.apiUrl | quote }}
+            - name: GUARDRAIL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "guardrail-cloud-connector.fullname" . }}-secrets
+                  key: guardrail-api-key
+                  optional: true
+            - name: PORT
+              value: {{ .Values.service.targetPort | quote }}
+            # AWS
+            - name: AWS_REGION
+              value: {{ .Values.aws.region | quote }}
+            - name: AWS_MARKETPLACE_PRODUCT_CODE
+              value: {{ .Values.aws.marketplaceProductCode | quote }}
+            # Azure
+            - name: AZURE_RESOURCE_ID
+              value: {{ .Values.azure.resourceId | quote }}
+            {{- if .Values.azure.accessToken }}
+            - name: AZURE_MARKETPLACE_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "guardrail-cloud-connector.fullname" . }}-secrets
+                  key: azure-access-token
+                  optional: true
+            {{- end }}
+            # GCP
+            - name: GCP_SERVICE_NAME
+              value: {{ .Values.gcp.serviceName | quote }}
+            {{- if .Values.gcp.serviceAccountJson }}
+            - name: GCP_SERVICE_ACCOUNT_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "guardrail-cloud-connector.fullname" . }}-secrets
+                  key: gcp-sa-json
+                  optional: true
+            {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
