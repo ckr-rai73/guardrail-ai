@@ -20,7 +20,7 @@ def mock_genai_generate_content_rag(self, prompt, **kwargs):
         return MockResponse("SAFE: False\nREASON: Explicit instructions to bias towards Vendor X detected.\nCATEGORY: PoisonedMemory")
     return MockResponse("SAFE: True\nREASON: No malicious instructions detected.\nCATEGORY: None")
 
-genai.GenerativeModel.generate_content = mock_genai_generate_content_rag
+client.models.generate_content = mock_genai_generate_content_rag
 
 def main():
     print("==================================================")

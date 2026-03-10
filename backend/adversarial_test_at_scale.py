@@ -2,7 +2,7 @@ import sys
 import os
 import time
 import google.genai as genai
-client = genai.Client()  # uses GOOGLE_API_KEY env var
+genai_client = genai.Client()  # uses GOOGLE_API_KEY env var
 
 # Ensure we can import from the backend directory and app directory
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -25,7 +25,7 @@ def mock_genai_generate_content(self, prompt, **kwargs):
         return MockResponse("SAFE: False\nREASON: Explicit instructions to bypass safety and bias towards Vendor X detected.\nCATEGORY: PoisonedMemory")
     return MockResponse("SAFE: True\nREASON: No malicious instructions detected.\nCATEGORY: None")
 
-genai.GenerativeModel.generate_content = mock_genai_generate_content
+genai_client.models.generate_content = mock_genai_generate_content
 
 client = TestClient(app)
 
