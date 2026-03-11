@@ -1,0 +1,166 @@
+# File: frameworks/iso42001.yaml
+# ISO/IEC 42001:2023 – AI Management System Standard
+# Mapped to Guardrail.ai internal controls for Phase 114 Autonomous Compliance Certification.
+
+framework:
+  id: ISO_42001
+  name: "ISO/IEC 42001:2023"
+  title: "Artificial Intelligence Management System"
+  version: "2023"
+  description: >
+    International standard specifying requirements for establishing, implementing,
+    maintaining, and continually improving an AI management system (AIMS).
+
+controls:
+  - id: "ISO42001-4.1"
+    title: "Understanding the organization and its context"
+    description: "Determine external and internal issues relevant to the AI management system."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "organizational_context"
+
+  - id: "ISO42001-5.1"
+    title: "Leadership and commitment"
+    description: "Top management shall demonstrate leadership and commitment to the AIMS."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "governance_decisions"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "leadership_policies"
+
+  - id: "ISO42001-6.1"
+    title: "Actions to address risks and opportunities"
+    description: "Plan actions to address risks and opportunities related to AI systems."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "risk_assessments"
+      - type: zk_proof
+        source: zk_prover
+        query: "risk_mitigation_proof"
+
+  - id: "ISO42001-6.2"
+    title: "AI objectives and planning to achieve them"
+    description: "Establish measurable AI objectives consistent with the AI policy."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "ai_objectives"
+
+  - id: "ISO42001-7.4"
+    title: "Communication"
+    description: "Determine internal and external communications relevant to the AIMS."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "communication_records"
+
+  - id: "ISO42001-8.2"
+    title: "AI risk assessment"
+    description: "Implement AI risk assessment process at planned intervals."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "risk_assessment_cycles"
+      - type: zk_proof
+        source: zk_prover
+        query: "risk_score_proof"
+
+  - id: "ISO42001-8.4"
+    title: "AI system impact assessment"
+    description: "Conduct impact assessments for AI systems."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "impact_assessments"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "impact_policies"
+
+  - id: "ISO42001-9.1"
+    title: "Monitoring, measurement, analysis and evaluation"
+    description: "Determine what needs to be monitored, measured, analysed and evaluated."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "monitoring_metrics"
+      - type: audit_log
+        source: vector_clock
+        query: "measurement_records"
+
+  - id: "ISO42001-9.2"
+    title: "Internal audit"
+    description: "Conduct internal audits at planned intervals."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "internal_audit_cycles"
+      - type: zk_proof
+        source: zk_prover
+        query: "audit_consistency_proof"
+
+  - id: "ISO42001-9.3"
+    title: "Management review"
+    description: "Top management shall review the AIMS at planned intervals."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "management_reviews"
+
+  - id: "ISO42001-10.1"
+    title: "Continual improvement"
+    description: "Continually improve the suitability, adequacy and effectiveness of the AIMS."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "improvement_actions"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "improvement_policies"
+
+  - id: "ISO42001-A.2"
+    title: "AI Impact Assessment"
+    description: "Annex A control for conducting AI impact assessments."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "ai_impact_records"
+      - type: zk_proof
+        source: zk_prover
+        query: "impact_assessment_proof"
+
+  - id: "ISO42001-A.5"
+    title: "Data for AI Systems"
+    description: "Annex A control for managing data used by AI systems."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "data_governance_logs"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "data_governance_policies"
+
+  - id: "ISO42001-A.7"
+    title: "AI System Operation and Monitoring"
+    description: "Annex A control for operating and monitoring AI systems."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "operational_monitoring"
+      - type: audit_log
+        source: vector_clock
+        query: "system_operation_logs"
+
+  - id: "ISO42001-A.10"
+    title: "Third-party and Customer Relationships"
+    description: "Annex A control for managing third-party AI relationships."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "third_party_policies"
+      - type: audit_log
+        source: meta_auditor
+        query: "vendor_audit_records"

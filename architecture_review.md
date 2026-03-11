@@ -1,6 +1,6 @@
 # 🏗️ Architecture Review: Guardrail.ai Sovereign Trust Platform
 
-**Last Updated**: 2026-03-11 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–113
+**Last Updated**: 2026-03-11 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–114
 
 
 
@@ -67,7 +67,7 @@ The system now incorporates a skill‑based knowledge layer for jurisdiction rul
 │ RegulatoryMapper (Phase 110) │
 └────────────────────────────┬────────────────────────────────┘
 │ called by
-▼
+                            ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ PolicyEngine (Phase 8, 110) │
 │ • detect_jurisdictions_from_context() │
@@ -144,6 +144,17 @@ Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules fo
 | Ledger Re-Anchor Orchestrator | `app/crypto/ledger_re_anchor_orchestrator.py` | <100ms/batch | CRITICAL |
 | Crypto Compliance Checker | `app/crypto/crypto_compliance_checker.py` | <500ms | HIGH |
 
+### Autonomous Compliance Certification (Phase 114)
+| Component | File | SLO | Security Level |
+|:---|:---|:---|:---|
+| Control Mapper | `app/compliance/control_mapper.py` | <10ms | HIGH |
+| Evidence Collector | `app/compliance/evidence_collector.py` | <100ms | CRITICAL |
+| Certificate Builder | `app/compliance/certificate_builder.py` | <200ms | CRITICAL |
+| ZK Prover (simulated) | `app/compliance/zk_prover.py` | <20ms | CRITICAL |
+| Auditor Portal (FastAPI) | `app/compliance/auditor_portal.py` | <50ms | CRITICAL |
+| Compliance Dashboard | `app/compliance/continuous_compliance_dashboard.py` | <100ms | HIGH |
+| Framework Definitions | `frameworks/*.yaml` (5 files) | n/a | HIGH |
+
 ### Orchestration (Phases 31–42, 100)
 | Component | File | SLO | Security Level |
 |:---|:---|:---|:---|
@@ -206,6 +217,13 @@ Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules fo
 | `/api/v1/redteam/schedules` | POST | 112 | API Key | 10/min |
 | `/api/v1/redteam/schedules` | GET | 112 | API Key | 100/min |
 | `/api/v1/redteam/schedules/{id}` | DELETE | 112 | API Key | 10/min |
+| `/api/v1/auditor/frameworks` | GET | 114 | X-Auditor-Key | 100/min |
+| `/api/v1/auditor/certificate/request` | POST | 114 | X-Auditor-Key | 10/min |
+| `/api/v1/auditor/certificate/{id}` | GET | 114 | X-Auditor-Key | 50/min |
+| `/api/v1/auditor/evidence/{control_id}` | GET | 114 | X-Auditor-Key | 50/min |
+| `/dashboard/status` | GET | 114 | X-Admin-Key | 100/min |
+| `/dashboard/controls` | GET | 114 | X-Admin-Key | 100/min |
+| `/dashboard/history` | GET | 114 | X-Admin-Key | 100/min |
 
 ---
 
@@ -228,8 +246,24 @@ Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules fo
 6. **L6 — Cloud Governance**: AWS/Azure/GCP Connectors, Marketplace Billing
 7. **L7 — Adversarial Validation**: RT-RTaaS Safe Exploit Engine, Scheduled Drills
 8. **L8 — Quantum Resilience**: PQC Key Rotation, Ledger Re-Anchoring, Crypto Compliance
+9. **L9 — Autonomous Compliance**: Control Mapping, ZK-Proof Evidence, Certificate Builder, Auditor Portal
 
-### Red-Team Review Status (Phases 98–113)
+### Threat Model Coverage (Updated March 2026)
+
+The following table maps emerging attack vectors—including those highlighted in recent industry reports—to the Guardrail.ai phases and modules that specifically counter them. This ensures continuous alignment with the evolving threat landscape.
+
+| Attack Vector / Scenario | Description | Guardrail.ai Countermeasure | Relevant Phase(s) |
+| :--- | :--- | :--- | :--- |
+| **BOLA / IDOR (API Logic Flaws)** | Attacker uses a valid authenticated request to access or modify another user's resource (e.g., changing an order's delivery address by guessing an ID). Traditional WAFs cannot detect this because the request is syntactically correct. | **Intent‑Based Authorization**: The Veto Protocol and Policy Engine evaluate the *intent* of every API call against the user's identity and permissions. A request to modify an order that does not belong to the authenticated user is flagged as `IntentDrift` and vetoed. | 1 (Veto), 5 (Intent Divergence), 8 (Policy Engine), 47 (Intent Convergence) |
+| **Social Engineering + Malicious File Download** | Attacker tricks a developer into downloading a malicious file disguised as a collaboration tool. The file then compromises the corporate device. | **Supply Chain & Manifest Auditing**: The Manifest Auditor scans all incoming code repositories for hidden threats (e.g., suspicious tool configurations). Low‑trust code is automatically quarantined in an isolated edge sandbox, preventing execution on sensitive hosts. | 98 (Manifest Auditor, Edge Sandbox) |
+| **Living‑off‑the‑Cloud (LoTC)** | After initial compromise, attacker abuses legitimate DevOps workflows (Kubernetes, Cloud SQL) to steal credentials and manipulate cloud resources, establishing persistence. | **Identity & Access Control**: The Lineage Verifier and Vault system issue ephemeral, tightly‑scoped tokens for every action. Any attempt to use a token outside its intended scope (e.g., a developer token used to modify a Kubernetes config) is denied. | 21 (Identity Laundering), 44 (Vault), 65–67 (Ephemeral Tokens) |
+| **Cloud Database Manipulation** | Attacker, once inside the cloud environment, attempts to directly alter cloud databases (e.g., Cloud SQL) via API calls to exfiltrate or modify data. | **Cloud Native Governance Plugins**: Every call to cloud provider APIs (AWS, Azure, GCP) is intercepted by the sidecar connectors. The request is evaluated against policy; if the action (e.g., `ALTER TABLE`) is not authorized for that identity, the Veto Protocol blocks it before it reaches the cloud endpoint. | 111 (Cloud Connectors) |
+| **Establishing Persistent Presence** | Attacker uses the compromised account to deploy new resources (e.g., Kubernetes deployments) to maintain access. | **Federated Threat Intelligence & Global Immunity**: The Signal Aggregator and Toxic Combination Correlator detect anomalous patterns (e.g., a new deployment from a developer account). A new threat signature is instantly broadcast via the Global Immunity mesh, blocking similar activity across all tenants. | 54–56 (Global Immunity), 99 (Toxic Combination Correlator) |
+| **Data Exfiltration via Physical or Off‑Channel Means** | Attacker steals data locally (e.g., via AirDrop) and then attempts to exfiltrate it over the network. | **Egress DLP & Data Loss Prevention**: The Phase 25 egress redactor scans all outbound traffic for sensitive patterns (e.g., AWS keys, credit card numbers) and blocks or redacts them, even if the data was obtained offline. | 25 (Egress Leak Simulation) |
+
+This threat model is continuously validated by our adversarial test suite, which now includes scenarios specifically targeting BOLA and multi‑stage cloud attacks.
+
+### Red-Team Review Status (Phases 98–114)
 | Phase | Red-Team Test | Result | Adversarial Script |
 |:---|:---|:---|:---|
 | 98 | Manifest tampering, trust-score bypass | ✅ PASS | `adversarial_test_phase98_manifest.py` |
@@ -248,6 +282,7 @@ Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules fo
 | 111 | Cloud connector blocking, modification, auth passthrough, billing accuracy | ✅ PASS | `test_connector_aws.py`, `test_connector_azure.py`, `test_connector_gcp.py`, `test_governance_client.py`, `test_billing_adapter.py` |
 | 112 | Target isolation, exfil prevention, resource limits, scheduling, reports, emergency stop | ✅ PASS (30/30) | `adversarial_test_phase112_redteam.py` |
 | 113 | Quantum forgery resistance, key rotation lifecycle, dual-signature, ledger re-anchoring, compliance checker, 10k-block perf | ✅ PASS (40+/40+) | `adversarial_test_phase113_quantum.py` |
+| 114 | Control mapping completeness, evidence collection, cert generation & tamper detection, auditor portal auth, ZK-proof simulation, false evidence injection | ✅ PASS (36/36) | `adversarial_test_phase114_compliance.py` |
 
 ---
 
@@ -277,4 +312,4 @@ Feature Branch → PR Review → Staging Deploy → Adversarial Tests
 ---
 
 **Review Board**: Guardrailai Architecture Council  
-**Next Review**: Phase 114 deployment
+**Next Review**: Phase 115 deployment

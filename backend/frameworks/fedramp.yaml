@@ -1,0 +1,120 @@
+# File: frameworks/fedramp.yaml
+# FedRAMP – Moderate Baseline
+# Mapped to Guardrail.ai internal controls for Phase 114 Autonomous Compliance Certification.
+
+framework:
+  id: FedRAMP
+  name: "FedRAMP"
+  title: "Federal Risk and Authorization Management Program – Moderate Baseline"
+  version: "Rev5-2023"
+  description: >
+    US government-wide program providing a standardized approach to security
+    assessment, authorization, and continuous monitoring for cloud products.
+
+controls:
+  - id: "FEDRAMP-AC-2"
+    title: "Account Management"
+    description: "Manage information system accounts including establishing, activating, and reviewing accounts."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "account_management_logs"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "access_policies"
+
+  - id: "FEDRAMP-AU-2"
+    title: "Audit Events"
+    description: "Determine auditable events and provide rationale for inclusion."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "audit_event_definitions"
+      - type: audit_log
+        source: vector_clock
+        query: "audit_event_logs"
+
+  - id: "FEDRAMP-AU-6"
+    title: "Audit Review, Analysis, and Reporting"
+    description: "Review and analyze audit records for indications of inappropriate activity."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "audit_review_reports"
+      - type: zk_proof
+        source: zk_prover
+        query: "audit_analysis_proof"
+
+  - id: "FEDRAMP-CA-7"
+    title: "Continuous Monitoring"
+    description: "Develop a continuous monitoring strategy and implement a continuous monitoring program."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "continuous_monitoring_strategy"
+      - type: audit_log
+        source: vector_clock
+        query: "monitoring_data"
+
+  - id: "FEDRAMP-CM-6"
+    title: "Configuration Settings"
+    description: "Establish mandatory configuration settings for IT products."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "configuration_baseline"
+
+  - id: "FEDRAMP-IA-2"
+    title: "Identification and Authentication"
+    description: "Uniquely identify and authenticate organizational users."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "authentication_logs"
+      - type: zk_proof
+        source: zk_prover
+        query: "identity_verification_proof"
+
+  - id: "FEDRAMP-IR-4"
+    title: "Incident Handling"
+    description: "Implement incident handling capability for security incidents."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "incident_handling_records"
+      - type: audit_log
+        source: vector_clock
+        query: "incident_response_logs"
+
+  - id: "FEDRAMP-RA-5"
+    title: "Vulnerability Scanning"
+    description: "Scan for vulnerabilities in the information system at defined frequencies."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "vulnerability_scan_results"
+      - type: zk_proof
+        source: zk_prover
+        query: "vulnerability_remediation_proof"
+
+  - id: "FEDRAMP-SC-28"
+    title: "Protection of Information at Rest"
+    description: "Protect the confidentiality and integrity of information at rest."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "encryption_at_rest_logs"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "data_protection_policies"
+
+  - id: "FEDRAMP-SI-4"
+    title: "Information System Monitoring"
+    description: "Monitor the information system to detect attacks and unauthorized connections."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "system_monitoring_alerts"
+      - type: audit_log
+        source: vector_clock
+        query: "intrusion_detection_logs"

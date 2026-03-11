@@ -1,6 +1,6 @@
-# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–113)
+# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–114)
 
-**Last Updated**: 2026-03-11 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 113/113
+**Last Updated**: 2026-03-11 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 114/114
 
 ---
 
@@ -28,6 +28,7 @@
 | 11–15 | RAG poisoning defenses, recursive injection traps, prompt obfuscation | ASI-level injection |
 | 16–20 | Cognitive stability — reentrancy guards, agentic mutex, reality mirroring | Logic collision |
 | 21–25 | Compliance traceability, tool manifest integrity, behavioral fingerprinting | Supply chain attacks |
+| **–** | **Intent‑Based Authorization (cross‑cutting)** | **BOLA/IDOR (API logic flaws)** – Veto Protocol and Policy Engine ensure that every action is validated against the user's identity and permissions, blocking unauthorized resource access even when requests are syntactically valid. |
 
 ---
 
@@ -125,6 +126,14 @@
 
 ---
 
+## 📜 Autonomous Compliance Certification (Phase 114): Self-Certifying Platform
+
+| Phase | Capability | Key Modules | Verification |
+|:---:|:---|:---|:---|
+| 114 | **Autonomous Compliance Certification** — auto-generates certification packages (ISO 42001, SOC 2, FedRAMP, EU AI Act, NIST AI RMF) from live ledger evidence; ZK-proof control efficacy; SPHINCS+ signed certificates; Auditor Portal with API-key auth; Continuous Compliance Dashboard | `control_mapper.py`, `evidence_collector.py`, `certificate_builder.py`, `zk_prover.py`, `auditor_portal.py`, `continuous_compliance_dashboard.py` | `adversarial_test_phase114_compliance.py` (36 tests: mapping completeness, evidence collection, cert gen/verify, auditor portal, ZK-proofs, tamper detection) |
+
+---
+
 ## Cross-Cutting Implementation Verification
 
 | Guideline | Status |
@@ -142,13 +151,17 @@
 
 | Regulation | Mapped Phases | Key Controls |
 |:---|:---|:---|
-| **EU AI Act (Art. 13, 14, 15)** | 70, 101 | Judicial certificates, Art. 13 metadata, transparency wrappers |
-| **FINRA Rule 3110** | 44, 77, 101 | Audit trails, supervisory controls, exposure metrics |
-| **SEC Rule 206(4)-7** | 4, 51–53, 101 | Merkle-anchored compliance records, forensic replay |
-| **RBI Circular on AI** | 8, 31–34 | Policy engine, tiered consensus, human oversight |
-| **SEBI LODR Reg. 17** | 92–96, 101 | Board-level reporting, operational stability monitoring |
+| **EU AI Act (Art. 13, 14, 15)** | 70, 101, 114 | Judicial certificates, Art. 13 metadata, transparency wrappers, auto-certification |
+| **FINRA Rule 3110** | 44, 77, 101, 114 | Audit trails, supervisory controls, exposure metrics, compliance dashboard |
+| **SEC Rule 206(4)-7** | 4, 51–53, 101, 114 | Merkle-anchored compliance records, forensic replay, ZK-proof evidence |
+| **RBI Circular on AI** | 8, 31–34, 114 | Policy engine, tiered consensus, human oversight, auto-certification |
+| **SEBI LODR Reg. 17** | 92–96, 101, 114 | Board-level reporting, operational monitoring, compliance dashboard |
+| **ISO/IEC 42001:2023** | 114 | AI Management System auto-certification (15 controls) |
+| **SOC 2 (Trust Services)** | 114 | Trust Services Criteria auto-certification (10 controls) |
+| **FedRAMP Moderate** | 114 | Federal baseline auto-certification (10 controls) |
+| **NIST AI RMF 1.0** | 114 | AI Risk Management auto-certification (10 controls) |
 
 ---
 
 **Document Owner**: Guardrail.ai Governance Team  
-**Next Review**: Phase 114 deployment
+**Next Review**: Phase 115 deployment

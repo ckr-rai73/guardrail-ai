@@ -1,0 +1,117 @@
+# File: frameworks/soc2.yaml
+# SOC 2 – Trust Services Criteria
+# Mapped to Guardrail.ai internal controls for Phase 114 Autonomous Compliance Certification.
+
+framework:
+  id: SOC2
+  name: "SOC 2"
+  title: "System and Organization Controls 2 – Trust Services Criteria"
+  version: "2022"
+  description: >
+    An auditing standard developed by the AICPA that specifies how organizations
+    should manage customer data based on five trust service criteria.
+
+controls:
+  - id: "SOC2-CC1.1"
+    title: "Control Environment – Integrity and Ethical Values"
+    description: "The entity demonstrates a commitment to integrity and ethical values."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "ethical_policies"
+      - type: audit_log
+        source: meta_auditor
+        query: "integrity_audits"
+
+  - id: "SOC2-CC2.1"
+    title: "Communication and Information"
+    description: "The entity obtains or generates and uses relevant, quality information."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "information_quality_logs"
+
+  - id: "SOC2-CC3.1"
+    title: "Risk Assessment"
+    description: "The entity considers the potential for fraud in assessing risks."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "fraud_risk_assessments"
+      - type: zk_proof
+        source: zk_prover
+        query: "risk_assessment_proof"
+
+  - id: "SOC2-CC4.1"
+    title: "Monitoring Activities"
+    description: "The entity selects, develops, and performs ongoing monitoring activities."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "monitoring_activities"
+      - type: audit_log
+        source: vector_clock
+        query: "continuous_monitoring"
+
+  - id: "SOC2-CC5.1"
+    title: "Control Activities"
+    description: "The entity selects and develops control activities."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "control_activities"
+      - type: audit_log
+        source: meta_auditor
+        query: "control_effectiveness"
+
+  - id: "SOC2-CC6.1"
+    title: "Logical and Physical Access Controls"
+    description: "Restrict logical access to information assets."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "access_control_logs"
+      - type: zk_proof
+        source: zk_prover
+        query: "access_verification_proof"
+
+  - id: "SOC2-CC7.1"
+    title: "System Operations"
+    description: "Detect and respond to system anomalies."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "anomaly_detection"
+      - type: audit_log
+        source: vector_clock
+        query: "system_operation_logs"
+
+  - id: "SOC2-CC8.1"
+    title: "Change Management"
+    description: "Authorize, design, develop, configure, document, test, approve, and implement changes."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "change_management_logs"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "change_policies"
+
+  - id: "SOC2-A1.1"
+    title: "Availability – Recovery"
+    description: "The entity maintains, monitors, and evaluates current processing capacity."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "availability_metrics"
+
+  - id: "SOC2-PI1.1"
+    title: "Processing Integrity"
+    description: "System processing is complete, valid, accurate, timely, and authorized."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "processing_integrity_logs"
+      - type: zk_proof
+        source: zk_prover
+        query: "integrity_proof"

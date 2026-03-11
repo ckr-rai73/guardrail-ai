@@ -1,0 +1,120 @@
+# File: frameworks/eu_ai_act.yaml
+# EU AI Act – Selected Articles
+# Mapped to Guardrail.ai internal controls for Phase 114 Autonomous Compliance Certification.
+
+framework:
+  id: EU_AI_ACT
+  name: "EU AI Act"
+  title: "European Union Artificial Intelligence Act – Selected Articles"
+  version: "2024"
+  description: >
+    The EU's comprehensive regulatory framework for AI systems,
+    establishing risk-based rules for development, deployment, and use of AI.
+
+controls:
+  - id: "EUAIA-ART6"
+    title: "Article 6 – Classification Rules for High-Risk AI Systems"
+    description: "Rules for classifying AI systems as high-risk based on intended purpose and use."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "ai_risk_classification"
+
+  - id: "EUAIA-ART9"
+    title: "Article 9 – Risk Management System"
+    description: "Establish, implement, document and maintain a risk management system."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "risk_management_system"
+      - type: zk_proof
+        source: zk_prover
+        query: "risk_management_proof"
+
+  - id: "EUAIA-ART10"
+    title: "Article 10 – Data and Data Governance"
+    description: "Training, validation and testing data shall be subject to appropriate data governance."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "data_governance_logs"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "data_governance_policies"
+
+  - id: "EUAIA-ART11"
+    title: "Article 11 – Technical Documentation"
+    description: "Technical documentation shall be drawn up before the AI system is placed on the market."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "technical_documentation"
+
+  - id: "EUAIA-ART12"
+    title: "Article 12 – Record Keeping"
+    description: "High-risk AI systems shall allow for automatic recording of events (logs)."
+    evidence_sources:
+      - type: audit_log
+        source: vector_clock
+        query: "event_recording_logs"
+      - type: audit_log
+        source: meta_auditor
+        query: "record_keeping_audit"
+
+  - id: "EUAIA-ART13"
+    title: "Article 13 – Transparency and Provision of Information"
+    description: "High-risk AI systems shall be designed to ensure operations are sufficiently transparent."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "transparency_reports"
+      - type: zk_proof
+        source: zk_prover
+        query: "transparency_proof"
+
+  - id: "EUAIA-ART14"
+    title: "Article 14 – Human Oversight"
+    description: "High-risk AI systems shall be designed to be effectively overseen by natural persons."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "human_oversight_records"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "human_oversight_policies"
+
+  - id: "EUAIA-ART15"
+    title: "Article 15 – Accuracy, Robustness and Cybersecurity"
+    description: "Achieve appropriate levels of accuracy, robustness and cybersecurity."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "accuracy_metrics"
+      - type: audit_log
+        source: vector_clock
+        query: "cybersecurity_logs"
+      - type: zk_proof
+        source: zk_prover
+        query: "robustness_proof"
+
+  - id: "EUAIA-ART17"
+    title: "Article 17 – Quality Management System"
+    description: "Providers of high-risk AI systems shall put a quality management system in place."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "quality_management"
+      - type: audit_log
+        source: meta_auditor
+        query: "quality_audits"
+
+  - id: "EUAIA-ART61"
+    title: "Article 61 – Post-market Monitoring"
+    description: "Providers shall establish a post-market monitoring system."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "post_market_monitoring"
+      - type: audit_log
+        source: vector_clock
+        query: "deployment_monitoring_logs"

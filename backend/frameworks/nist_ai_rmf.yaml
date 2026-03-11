@@ -1,0 +1,117 @@
+# File: frameworks/nist_ai_rmf.yaml
+# NIST AI Risk Management Framework (AI RMF 1.0)
+# Mapped to Guardrail.ai internal controls for Phase 114 Autonomous Compliance Certification.
+
+framework:
+  id: NIST_AI_RMF
+  name: "NIST AI RMF"
+  title: "NIST Artificial Intelligence Risk Management Framework 1.0"
+  version: "1.0-2023"
+  description: >
+    A voluntary framework developed by NIST to help organizations manage risks
+    associated with AI systems throughout their lifecycle.
+
+controls:
+  - id: "NIST-GOV-1"
+    title: "GOVERN 1 – Policies, processes, procedures, and practices"
+    description: "Establish and implement policies for AI risk management across the organization."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "ai_governance_policies"
+      - type: audit_log
+        source: meta_auditor
+        query: "governance_reviews"
+
+  - id: "NIST-GOV-2"
+    title: "GOVERN 2 – Accountability"
+    description: "Accountability structures are in place for AI risk management."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "accountability_records"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "accountability_policies"
+
+  - id: "NIST-MAP-1"
+    title: "MAP 1 – Context Establishment"
+    description: "Context is established and understood including intended deployment."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "deployment_context"
+      - type: audit_log
+        source: vector_clock
+        query: "context_establishment_logs"
+
+  - id: "NIST-MAP-3"
+    title: "MAP 3 – AI Benefits and Costs"
+    description: "AI benefits and costs are understood by relevant stakeholders."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "benefit_cost_analysis"
+
+  - id: "NIST-MEA-1"
+    title: "MEASURE 1 – Appropriate Methods and Metrics"
+    description: "Appropriate methods and metrics are identified for AI risk measurement."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "risk_measurement_metrics"
+      - type: zk_proof
+        source: zk_prover
+        query: "measurement_validity_proof"
+
+  - id: "NIST-MEA-2"
+    title: "MEASURE 2 – AI Systems Evaluated"
+    description: "AI systems are evaluated for trustworthy characteristics."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "trustworthiness_evaluation"
+      - type: audit_log
+        source: vector_clock
+        query: "evaluation_test_logs"
+
+  - id: "NIST-MEA-4"
+    title: "MEASURE 4 – Feedback"
+    description: "Feedback about efficacy of measurement is collected and acted on."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "measurement_feedback"
+
+  - id: "NIST-MAN-1"
+    title: "MANAGE 1 – AI Risks Prioritized"
+    description: "AI risks based on the assessments are prioritized, responded to, and managed."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "risk_prioritization"
+      - type: policy_snapshot
+        source: policy_engine
+        query: "risk_response_plans"
+
+  - id: "NIST-MAN-2"
+    title: "MANAGE 2 – Strategies for Risk Response"
+    description: "Strategies to maximize AI benefits and minimize negative impacts are planned."
+    evidence_sources:
+      - type: policy_snapshot
+        source: policy_engine
+        query: "risk_mitigation_strategies"
+      - type: zk_proof
+        source: zk_prover
+        query: "mitigation_effectiveness_proof"
+
+  - id: "NIST-MAN-4"
+    title: "MANAGE 4 – Risk Treatments are Documented"
+    description: "Risk treatments are documented and monitored regularly."
+    evidence_sources:
+      - type: audit_log
+        source: meta_auditor
+        query: "risk_treatment_documentation"
+      - type: audit_log
+        source: vector_clock
+        query: "treatment_monitoring_logs"

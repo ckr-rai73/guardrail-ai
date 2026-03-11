@@ -68,6 +68,15 @@ class Settings(BaseSettings):
     PQC_REANCHOR_BATCH_SIZE: int = 1000            # blocks per batch
     PQC_COMPLIANCE_CHECK_INTERVAL: int = 86400     # seconds (daily)
 
+    # ------------------------------------------------------------------
+    # Autonomous Compliance Certification (Phase 114)
+    # ------------------------------------------------------------------
+    COMPLIANCE_EVIDENCE_RETENTION_DAYS: int = 2555          # 7 years
+    COMPLIANCE_CERTIFICATE_STORAGE_PATH: str = "/var/guardrail/certificates"
+    COMPLIANCE_SUPPORTED_FRAMEWORKS: list = [
+        "ISO_42001", "SOC2", "FedRAMP", "EU_AI_ACT", "NIST_AI_RMF",
+    ]
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
