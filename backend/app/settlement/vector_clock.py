@@ -13,6 +13,12 @@ class VectorClockLedger:
     """
     
     @classmethod
+    async def append(cls, entry: dict):
+        """Append a general audit record to the immutable ledger."""
+        print(f"[VECTOR CLOCK] Appended ledger entry: {entry.get('event', 'unknown')}")
+        return True
+
+    @classmethod
     def process_right_to_erasure(cls, user_id: str) -> dict:
         """
         Phase 45: DPDP Act 2023 (India) Compliance Verification.

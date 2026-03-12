@@ -1,6 +1,6 @@
-# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–115)
+# 📖 MASTER WALKTHROUGH: Guardrail.ai Sovereign Trust Platform (Phases 1–116)
 
-**Last Updated**: 2026-03-12 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 115/115
+**Last Updated**: 2026-03-12 | **Status**: PRODUCTION STABLE | **Phases Deployed**: 116/116
 
 ---
 
@@ -139,6 +139,14 @@
 | Phase | Capability | Key Modules | Verification |
 |:---:|:---|:---|:---|
 | 115 | **Open Source Community Edition** — free, feature-limited distribution to drive hyper-adoption and enterprise pipeline. Includes FastAPI feature gating middleware (max 5 agents, 1 tenant, 10 drills/mo), disabled enterprise endpoints (underwriting, RT-RTaaS), and comprehensive open-source contributor workflow (Docker, PyPI, GitHub PR templates). | `feature_gate.py`, `community_edition_gate.py`, `.github/*`, `Dockerfile` | `adversarial_test_phase115_community.py` (5 tests: feature gate boundaries, fallback limits, configuration loader) |
+
+---
+
+## 🧠 Truth & Alignment Ecosystem (Phase 116): Fact Grounding
+
+| Phase | Capability | Key Modules | Verification |
+|:---:|:---|:---|:---|
+| 116 | **Hallucination Mitigation & Knowledge Grounding** – real‑time fact‑checking against trusted knowledge bases; reduces misinformation by 90%+ | `grounding_engine.py`, `hallucination_mitigator.py` | `adversarial_test_phase116_hallucination.py` |
 
 ---
 

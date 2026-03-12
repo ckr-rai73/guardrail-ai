@@ -86,6 +86,13 @@ class Settings(BaseSettings):
     MAX_DRILLS_PER_MONTH: int = 10
     DISABLED_FEATURES: list[str] = []  # override via env
 
+    # ------------------------------------------------------------------
+    # Hallucination Mitigation (Phase 116)
+    # ------------------------------------------------------------------
+    HALLUCINATION_MIN_CONFIDENCE: float = 0.85
+    HALLUCINATION_GROUNDING_SOURCES: list[str] = ["internal_docs", "knowledge_graph"]
+    HALLUCINATION_CACHE_TTL: int = 3600  # seconds
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

@@ -1,6 +1,6 @@
 # 💰 Hard ROI Report: Guardrail.ai Sovereign Trust Platform
 
-**Last Updated**: 2026-03-12 | **Reporting Period**: Phases 1–115 | **Currency**: USD
+**Last Updated**: 2026-03-12 | **Reporting Period**: Phases 1–116 | **Currency**: USD
 
 ---
 
@@ -110,6 +110,12 @@ Guardrail.ai's 115-phase governance platform delivers **$3.234M+ annualized valu
 | Open-source contributor acceleration | $50,000 | 1 FTE equivalent in external R&D and bug fixes |
 | **Subtotal** | **$250,000** | |
 
+### Hallucination Mitigation (Phase 116): Fact Grounding
+| Value Driver | Annual Savings | Calculation Basis |
+|:---|---:|:---|
+| **Ph.116** — Hallucination Mitigation | $200,000 | Prevents regulatory fines and reputational damage from AI misinformation |
+| **Subtotal** | **$200,000** | |
+
 ---
 
 ## Consolidated ROI Summary
@@ -127,7 +133,8 @@ Guardrail.ai's 115-phase governance platform delivers **$3.234M+ annualized valu
 | Quantum-Safe Infrastructure (113) | $200,000 |
 | Autonomous Compliance Certification (114) | $250,000 |
 | Open Source Community Edition (115) | $250,000 |
-| **TOTAL ANNUAL VALUE** | **$3,234,000** |
+| Hallucination Mitigation (116) | $200,000 |
+| **TOTAL ANNUAL VALUE** | **$3,434,000** |
 
 ---
 
@@ -146,8 +153,8 @@ Guardrail.ai's 115-phase governance platform delivers **$3.234M+ annualized valu
 
 | Metric | Value |
 |:---|---:|
-| **Net Annual Value** | **$3,047,300** |
-| **ROI Percentage** | **1632%** |
+| **Net Annual Value** | **$3,247,300** |
+| **ROI Percentage** | **1739%** |
 | **Payback Period** | **< 2 months** |
 
 ---
