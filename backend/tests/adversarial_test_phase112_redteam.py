@@ -30,6 +30,17 @@ from app.redteam.models import (
     VulnerabilityFinding,
 )
 from app.redteam.safe_exploit_engine import SafeExploitEngine, SafetyViolation
+from pydantic import ValidationError
+
+class MockChaosOrchestrator:
+    async def run_drill(self, config, *args, **kwargs):
+        pass
+
+class SlowMockChaosOrchestrator(MockChaosOrchestrator):
+    async def run_drill(self, config, *args, **kwargs):
+        await asyncio.sleep(2)   # simulate long-running drill
+        return await super().run_drill(config, *args, **kwargs)
+
 from app.redteam.report_generator import ReportGenerator
 from app.redteam.scheduler import RedTeamScheduler
 
@@ -112,10 +123,8 @@ class TestTargetIsolation:
         config = _staging_config(target_agent_ids=["production-critical-1"])
         run = DrillRun(client_id="client-1", config=config)
 
-        result = await engine.run_drill(run)
-        assert run.status == DrillStatus.FAILED
-        assert any("SAFETY VIOLATION" in log for log in result.raw_logs)
-
+        with pytest.raises(SafetyViolation, match="All targets must start with 'staging-'"):
+            await engine.run_drill(run)
 
 # ======================================================================
 # 2. Safety: Resource Limits
@@ -126,15 +135,13 @@ class TestResourceLimits:
 
     def test_duration_limit(self, engine):
         """Duration exceeding max is rejected."""
-        config = _staging_config(max_duration_seconds=9999)
-        with pytest.raises(SafetyViolation, match="Duration"):
-            engine.validate_config(config)
+        with pytest.raises(ValidationError):
+            _staging_config(max_duration_seconds=9999)
 
     def test_rps_limit(self, engine):
         """RPS exceeding 500 is rejected."""
-        config = _staging_config(max_rps=501)
-        with pytest.raises(SafetyViolation):
-            engine.validate_config(config)
+        with pytest.raises(ValidationError):
+            _staging_config(max_rps=501)
 
     def test_concurrent_limit(self, engine):
         """Too many concurrent drills per client are rejected."""
@@ -213,6 +220,9 @@ class TestEmergencyStop:
     @pytest.mark.asyncio
     async def test_stop_active_drill(self, engine):
         """Stopping an active drill changes status to STOPPED."""
+        # Replace the engine's chaos orchestrator with a slow one
+        engine.chaos_orchestrator = SlowMockChaosOrchestrator()
+        
         config = _staging_config(max_duration_seconds=60, max_rps=1)
         run = DrillRun(client_id="client-1", config=config)
 
@@ -220,7 +230,7 @@ class TestEmergencyStop:
         task = asyncio.create_task(engine.run_drill(run))
 
         # Wait a bit then stop
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.1)   # ensure drill has started
         assert engine.stop_drill(run.id) is True
 
         result = await task
