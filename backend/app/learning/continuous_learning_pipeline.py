@@ -6,7 +6,6 @@ import google.genai as genai
 client = genai.Client()  # uses GOOGLE_API_KEY env var
 
 # Configure Gemini for learning module
-)
 # Using Gemini 1.5 Pro for complex code generation/analysis
 MODEL_NAME = "models/gemini-1.5-pro"
 

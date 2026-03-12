@@ -138,7 +138,7 @@ async def test_assess_invalid_json(client):
     with pytest.raises(GovernanceAPIError) as exc_info:
         await client.assess({"service": "sagemaker"})
 
-    assert "invalid JSON" in str(exc_info.value).lower()
+    assert "invalid json" in str(exc_info.value).lower()
 
 
 @pytest.mark.asyncio

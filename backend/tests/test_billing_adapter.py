@@ -139,12 +139,12 @@ async def test_aws_meter_usage_success():
         mock_settings.AWS_MARKETPLACE_PRODUCT_CODE = "prod-abc123"
         mock_settings.AWS_REGION = "us-east-1"
 
-        with patch("app.cloud.billing_adapter.botocore.awsrequest.AWSRequest") as MockReq:
+        with patch("botocore.awsrequest.AWSRequest") as MockReq:
             mock_req_instance = MagicMock()
             mock_req_instance.headers = {"Authorization": "AWS4-HMAC-SHA256 ..."}
             MockReq.return_value = mock_req_instance
 
-            with patch("app.cloud.billing_adapter.botocore.auth.SigV4Auth") as MockAuth:
+            with patch("botocore.auth.SigV4Auth") as MockAuth:
                 mock_signer = MagicMock()
                 MockAuth.return_value = mock_signer
 
@@ -186,12 +186,12 @@ async def test_aws_meter_usage_failure():
         mock_settings.AWS_MARKETPLACE_PRODUCT_CODE = "prod-abc"
         mock_settings.AWS_REGION = "us-east-1"
 
-        with patch("app.cloud.billing_adapter.botocore.awsrequest.AWSRequest") as MockReq:
+        with patch("botocore.awsrequest.AWSRequest") as MockReq:
             mock_req_instance = MagicMock()
             mock_req_instance.headers = {}
             MockReq.return_value = mock_req_instance
 
-            with patch("app.cloud.billing_adapter.botocore.auth.SigV4Auth"):
+            with patch("botocore.auth.SigV4Auth"):
                 # Should NOT raise despite 400
                 await adapter._record_aws(record)
 
