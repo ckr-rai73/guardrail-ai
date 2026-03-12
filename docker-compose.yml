@@ -1,0 +1,21 @@
+# File: docker-compose.yml
+version: '3.8'
+
+services:
+  guardrail-api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - COMMUNITY_EDITION=True
+      - MAX_AGENTS=5
+      - MAX_TENANTS=1
+      - DEBUG=True
+    # Redis is optional for Community Edition rate-limiting and task queues
+    # depends_on:
+    #   - redis
+
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"

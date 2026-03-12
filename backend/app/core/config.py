@@ -77,9 +77,19 @@ class Settings(BaseSettings):
         "ISO_42001", "SOC2", "FedRAMP", "EU_AI_ACT", "NIST_AI_RMF",
     ]
 
+    # ------------------------------------------------------------------
+    # Open Source Community Edition (Phase 115)
+    # ------------------------------------------------------------------
+    COMMUNITY_EDITION: bool = False
+    MAX_AGENTS: int = 5
+    MAX_TENANTS: int = 1
+    MAX_DRILLS_PER_MONTH: int = 10
+    DISABLED_FEATURES: list[str] = []  # override via env
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
 
 # Singleton – import ``settings`` anywhere in the app.

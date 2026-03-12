@@ -1,6 +1,6 @@
 # 🏗️ Architecture Review: Guardrail.ai Sovereign Trust Platform
 
-**Last Updated**: 2026-03-11 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–114
+**Last Updated**: 2026-03-12 | **Review Cycle**: Per-Phase | **Phases Reviewed**: 1–115
 
 
 
@@ -155,6 +155,13 @@ Deployment options: Docker image + Helm chart (Kubernetes), Terraform modules fo
 | Compliance Dashboard | `app/compliance/continuous_compliance_dashboard.py` | <100ms | HIGH |
 | Framework Definitions | `frameworks/*.yaml` (5 files) | n/a | HIGH |
 
+### Open Source Community Edition (Phase 115)
+| Component | File | SLO | Security Level |
+|:---|:---|:---|:---|
+| Community Feature Gate | `app/community/feature_gate.py` | <5ms | HIGH |
+| Community Middleware | `app/community/community_edition_gate.py` | <5ms | HIGH |
+| Contributor Workflows | `.github/*` Templates | n/a | MEDIUM |
+
 ### Orchestration (Phases 31–42, 100)
 | Component | File | SLO | Security Level |
 |:---|:---|:---|:---|
@@ -283,6 +290,7 @@ This threat model is continuously validated by our adversarial test suite, which
 | 112 | Target isolation, exfil prevention, resource limits, scheduling, reports, emergency stop | ✅ PASS (30/30) | `adversarial_test_phase112_redteam.py` |
 | 113 | Quantum forgery resistance, key rotation lifecycle, dual-signature, ledger re-anchoring, compliance checker, 10k-block perf | ✅ PASS (40+/40+) | `adversarial_test_phase113_quantum.py` |
 | 114 | Control mapping completeness, evidence collection, cert generation & tamper detection, auditor portal auth, ZK-proof simulation, false evidence injection | ✅ PASS (36/36) | `adversarial_test_phase114_compliance.py` |
+| 115 | Feature gate boundaries, HTTP 403 on enterprise endpoints, robust limit enforcement, application of default configurations | ✅ PASS (5/5) | `adversarial_test_phase115_community.py` |
 
 ---
 
@@ -312,4 +320,4 @@ Feature Branch → PR Review → Staging Deploy → Adversarial Tests
 ---
 
 **Review Board**: Guardrailai Architecture Council  
-**Next Review**: Phase 115 deployment
+**Next Review**: Phase 116 deployment

@@ -133,6 +133,9 @@ async def secure_headers_middleware(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY" # Enforce globally on our own endpoints
     return response
 
+from app.community.community_edition_gate import community_edition_middleware
+app.middleware("http")(community_edition_middleware)
+
 @app.get("/health")
 def health_check():
     return {"status": "ok", "message": "Sentinel Node Governance Gateway is running."}
