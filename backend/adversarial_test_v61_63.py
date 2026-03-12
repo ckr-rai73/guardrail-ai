@@ -50,7 +50,7 @@ async def run_v61_63_stress_test():
     print(f"Drift Audit: {audit_drift['status']} | Drift: {audit_drift['drift_score']}")
     
     assert audit_stable["status"] == "VERIFIED_STABLE"
-    assert audit_drift["status"] == "VERIFIED_STABLE"
+    assert audit_drift["status"] == "COMPROMISED"
 
     print("\n--- PHASES 61-63 DYNAMIC RESILIENCE TEST COMPLETED: SUCCESS ---")
 
