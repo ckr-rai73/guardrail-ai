@@ -93,6 +93,15 @@ class Settings(BaseSettings):
     HALLUCINATION_GROUNDING_SOURCES: list[str] = ["internal_docs", "knowledge_graph"]
     HALLUCINATION_CACHE_TTL: int = 3600  # seconds
 
+    # ------------------------------------------------------------------
+    # Predictive Swarm Intelligence (Phase 117)
+    # ------------------------------------------------------------------
+    PREDICTIVE_ENABLED: bool = True
+    PREDICTIVE_SIMULATION_MAX_AGENTS: int = 10000
+    PREDICTIVE_SIMULATION_STEPS: int = 1000
+    PREDICTIVE_RISK_THRESHOLD: float = 0.7
+    PREDICTIVE_GRAPH_BACKEND: str = "networkx"
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

@@ -150,6 +150,14 @@
 
 ---
 
+## 🔮 Predictive Swarm Intelligence (Phase 117): Attack Forecasting
+
+| Phase | Capability | Key Modules | Verification |
+|:---:|:---|:---|:---|
+| 117 | **Predictive Swarm Intelligence & Attack Forecasting** – simulates thousands of adversarial agents to predict future attack vectors, emergent collusion, and systemic vulnerabilities; feeds forecasts back to core governance | `adversarial_knowledge_graph.py`, `swarm_simulation_engine.py`, `predictive_risk_forecaster.py`, `emergent_pattern_detector.py`, `automated_scenario_generator.py` | `adversarial_test_phase117_predictive.py` (7/7 passed) |
+
+---
+
 ## Cross-Cutting Implementation Verification
 
 | Guideline | Status |
